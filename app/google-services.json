@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "805401383423",
+    "project_id": "pushnotify-98da4"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805401383423:android:efcc1ed2843f37c1",
+        "android_client_info": {
+          "package_name": "com.example.ryanm.pushnotify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdslkPuLpM1yGHwF-_vxcj5LWqfpMF9nU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
