@@ -23,6 +23,10 @@ public class RegistrationService extends IntentService{
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE,
                     null
             );
+
+            RegIDAPI regIDAPI = new RegIDAPI();
+            regIDAPI.AddNewDevice(new AppDevice(registrationToken));
+
             GcmPubSub subscription = GcmPubSub.getInstance(this);
             subscription.subscribe(registrationToken, "/topics/test", null);
         }catch (IOException e){
