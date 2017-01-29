@@ -1,31 +1,22 @@
 package com.example.ryanm.pushnotify;
 
-import org.json.JSONObject;
+import com.google.gson.Gson;
 
 
 public class RegIDAPI {
     private DBInteraction dbInteraction;
-
+    private Gson gson;
     public RegIDAPI()
     {
         dbInteraction = new DBInteraction();
+        gson = new Gson();
     }
 
     public void AddNewDevice(AppDevice device)
     {
-        JSONObject object = new JSONObject();
-
-        try{
-            object.put("AppDeviceID",device.AppDeviceID);
-            object.put("RegID", device.RegID);
-        }catch (Exception e)
-        {
-            System.out.println("JSON ERROR");
-        }
-
         String [] http = new String [2];
         http[0] = "api/myapp/addnewdevice/";
-        http[1] = object.toString();
+        http[1] = gson.toJson(device);
         dbInteraction.SendData(http);
     }
 }
