@@ -1,14 +1,11 @@
 package com.example.ryanm.pushnotify;
 
-/**
- * Created by ryanm on 1/28/2017.
- */
 
-public class AppDevice {
-    public int AppDeviceID;
-    public String RegID;
-    public AppDevice (String regid)
+class AppDevice {
+    private int AppDeviceID;
+    private String RegID;
+    AppDevice (String reg_id)
     {
-        RegID = regid;
+        RegID = reg_id;
     }
 }

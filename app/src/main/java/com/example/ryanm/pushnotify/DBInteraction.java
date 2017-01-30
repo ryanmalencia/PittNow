@@ -1,10 +1,6 @@
 package com.example.ryanm.pushnotify;
 
 import android.os.AsyncTask;
-import com.google.gson.Gson;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -13,27 +9,19 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class DBInteraction {
+class DBInteraction {
 
     private static final String api_url = "http://192.168.1.152:59939/";
 
-    public DBInteraction()
+    DBInteraction()
     {
-        Gson gson = new Gson();
     }
 
-    private static String cleanJson(String json)
-    {
-        json = json.substring(1,json.length()-1);
-        json = json.replace("\\", "");
-        return json;
-    }
-
-    protected void SendData(String [] http)
+    void SendData(String [] http)
     {
         new SendTheData().execute(http);
     }
-    protected void GetData(String [] http){ new GetTheData().execute(http); }
+    void GetData(String [] http){ new GetTheData().execute(http); }
 
     private class SendTheData extends AsyncTask<String, Void, Void> {
         protected void onPreExecute() {
@@ -65,12 +53,14 @@ public class DBInteraction {
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setRequestMethod("PUT");
                 urlConnection.connect();
-                OutputStream outputStream = urlConnection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-                writer.write(info);
-                writer.close();
+                if(info != null) {
+                    OutputStream outputStream = urlConnection.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    writer.write(info);
+                    writer.close();
+                    outputStream.close();
+                }
                 urlConnection.getInputStream();
-                outputStream.close();
                 urlConnection.disconnect();
                 System.out.println("Success");
             } catch (Exception e) {
@@ -80,7 +70,7 @@ public class DBInteraction {
         }
     }
 
-    class GetTheData extends AsyncTask<String, Void, String> {
+    private class GetTheData extends AsyncTask<String, Void, String> {
         protected void onPreExecute() {
 
         }
@@ -105,11 +95,13 @@ public class DBInteraction {
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
-                OutputStream outputStream = urlConnection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-                writer.write(info);
-                writer.close();
-                outputStream.close();
+                if(info != null) {
+                    OutputStream outputStream = urlConnection.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                    writer.write(info);
+                    writer.close();
+                    outputStream.close();
+                }
                 try {
                     BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     StringBuilder sb = new StringBuilder();
@@ -124,8 +116,6 @@ public class DBInteraction {
                 finally{
                     urlConnection.disconnect();
                 }
-                //System.out.println("Success");
-                //return null;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 return null;
@@ -133,16 +123,7 @@ public class DBInteraction {
         }
 
         protected void onPostExecute(String response) {
-            if (response == null) {
-                response = "ERROR";
-            }
-            response = cleanJson(response);
-            try {
-                JSONObject object = (JSONObject) new JSONTokener(response).nextValue();
 
-            } catch (JSONException e) {
-                System.out.println("Error in JSON");
-            }
         }
     }
 }
