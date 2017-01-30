@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">PushNotify</string>
+    <string name="app_name">Pitt Events</string>
+    <string name="sports">Sports</string>
+    <string name="concerts">Concerts</string>
+    <string name="clubs">Clubs</string>
+    <string name="campus">Campus</string>
+    <string name="other">Other</string>
 </resources>

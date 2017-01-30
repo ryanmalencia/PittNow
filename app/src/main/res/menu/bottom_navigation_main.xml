@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sports"
+        android:enabled="true"
+        android:icon="@drawable/sports"
+        android:title="@string/sports"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_concerts"
+        android:enabled="true"
+        android:icon="@drawable/music"
+        android:title="@string/concerts"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_campus"
+        android:enabled="true"
+        android:icon="@drawable/campus"
+        android:title="@string/campus"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_clubs"
+        android:enabled="true"
+        android:icon="@drawable/clubs"
+        android:title="@string/clubs"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_other"
+        android:enabled="true"
+        android:icon="@drawable/other"
+        android:title="@string/other"
+        app:showAsAction="ifRoom" />
+</menu>
