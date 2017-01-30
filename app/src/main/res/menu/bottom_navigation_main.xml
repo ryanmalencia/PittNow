@@ -4,31 +4,31 @@
     <item
         android:id="@+id/action_sports"
         android:enabled="true"
-        android:icon="@drawable/sports"
+        android:icon="@drawable/ic_sports"
         android:title="@string/sports"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_concerts"
         android:enabled="true"
-        android:icon="@drawable/music"
+        android:icon="@drawable/ic_concerts"
         android:title="@string/concerts"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_campus"
         android:enabled="true"
-        android:icon="@drawable/campus"
+        android:icon="@drawable/ic_campus"
         android:title="@string/campus"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_clubs"
         android:enabled="true"
-        android:icon="@drawable/clubs"
+        android:icon="@drawable/ic_clubs"
         android:title="@string/clubs"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_other"
         android:enabled="true"
-        android:icon="@drawable/other"
+        android:icon="@drawable/ic_other"
         android:title="@string/other"
         app:showAsAction="ifRoom" />
 </menu>
