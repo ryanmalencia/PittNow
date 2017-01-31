@@ -47,9 +47,9 @@ public class RegistrationService extends IntentService{
                 if(!ID.equals(registrationToken))
                 {
                     regIDAPI.DeleteID(new AppDevice(ID));
-                    regIDAPI.AddNewDevice(new AppDevice(registrationToken));
                     writeNewFile(registrationToken);
                 }
+                regIDAPI.AddNewDevice(new AppDevice(registrationToken));
                 buff_reader.close();
                 isr.close();
                 fis.close();
