@@ -11,7 +11,7 @@ import java.net.URL;
 
 public class DBInteraction {
 
-    public static final String api_url = "http://192.168.1.152:59939/";
+    public static final String api_url = "http://96.235.39.111:44444/";
 
     public DBInteraction()
     {
