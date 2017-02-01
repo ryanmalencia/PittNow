@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         protected String doInBackground(Void... urls){
             try {
-                URL url = new URL(DBInteraction.api_url + "api/sportevent/getclosestevents");
+                URL url = new URL(DBInteraction.api_url + "api/sportevent/getfutureevents");
                 System.out.println(url.toString());
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
