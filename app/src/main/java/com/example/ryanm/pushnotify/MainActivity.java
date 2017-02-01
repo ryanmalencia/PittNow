@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.multidex.MultiDex;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MultiDex.install(this);
         setContentView(R.layout.activity_main);
         Intent intent = new Intent(this, RegistrationService.class);
         startService(intent);
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(bottom_navigation);
 
+        //Do Stuff based on a change of selected item in Bottom Nav View
         bottomNavigationView.setOnNavigationItemSelectedListener(
         new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         });
         new RetrieveData().execute();
 
+        //Set Listener of SwipeRefreshLayout
         swipe = (SwipeRefreshLayout)findViewById(R.id.activity_main_swipe_refresh_layout);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -72,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Android is weird with JSON's, this conditions JSON for deserialiation
+     * @param json JSON to convert to Android JSON format
+     * @return string of converted JSON
+     */
     public static String cleanJson(String json)
     {
         json = json.substring(1,json.length()-1);
@@ -79,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
         return json;
     }
 
+    /**
+     * Get SportEvent Data (closest 10 to today's date)
+     *
+     */
     class RetrieveData extends AsyncTask<Void, Void, String> {
         protected void onPreExecute() {
         }
@@ -137,5 +150,4 @@ public class MainActivity extends AppCompatActivity {
             swipe.setRefreshing(false);
         }
     }
-
 }

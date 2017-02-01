@@ -8,6 +8,10 @@ import com.google.gson.Gson;
 public class RegIDAPI {
     private DBInteraction dbInteraction;
     private Gson gson;
+
+    /**
+     * Class for interfacing with RegID Database
+     */
     public RegIDAPI()
     {
         dbInteraction = new DBInteraction();

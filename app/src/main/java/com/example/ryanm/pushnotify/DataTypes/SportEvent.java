@@ -14,6 +14,9 @@ public class SportEvent {
 
     public Sport Sport;
 
+    /**
+     * Class that represents a Sporting Event
+     */
     public SportEvent()
     {
 
