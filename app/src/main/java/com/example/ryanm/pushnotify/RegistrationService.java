@@ -3,6 +3,8 @@ package com.example.ryanm.pushnotify;
 import android.app.IntentService;
 import android.content.Intent;
 
+import com.example.ryanm.pushnotify.ApiCalls.RegIDAPI;
+import com.example.ryanm.pushnotify.DataTypes.AppDevice;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;

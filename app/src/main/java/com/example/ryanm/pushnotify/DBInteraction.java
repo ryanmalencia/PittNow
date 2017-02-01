@@ -9,15 +9,15 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class DBInteraction {
+public class DBInteraction {
 
-    private static final String api_url = "http://192.168.1.152:59939/";
+    public static final String api_url = "http://192.168.1.152:59939/";
 
-    DBInteraction()
+    public DBInteraction()
     {
     }
 
-    void SendData(String [] http)
+    public void SendData(String [] http)
     {
         new SendTheData().execute(http);
     }

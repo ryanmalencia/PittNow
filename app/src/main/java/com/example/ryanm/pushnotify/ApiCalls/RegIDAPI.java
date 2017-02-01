@@ -1,12 +1,14 @@
-package com.example.ryanm.pushnotify;
+package com.example.ryanm.pushnotify.ApiCalls;
 
+import com.example.ryanm.pushnotify.DBInteraction;
+import com.example.ryanm.pushnotify.DataTypes.AppDevice;
 import com.google.gson.Gson;
 
 
-class RegIDAPI {
+public class RegIDAPI {
     private DBInteraction dbInteraction;
     private Gson gson;
-    RegIDAPI()
+    public RegIDAPI()
     {
         dbInteraction = new DBInteraction();
         gson = new Gson();
@@ -17,7 +19,7 @@ class RegIDAPI {
      *
      * @param device device to add to DB
      */
-    void AddNewDevice(AppDevice device)
+    public void AddNewDevice(AppDevice device)
     {
         String [] http = new String [2];
         http[0] = "api/myapp/addnewdevice/";
@@ -30,7 +32,7 @@ class RegIDAPI {
      *
      * @param device device to remove from DB
      */
-    void DeleteID(AppDevice device)
+    public void DeleteID(AppDevice device)
     {
         String [] http = new String [2];
         http[0] = "api/myapp/delete/";
