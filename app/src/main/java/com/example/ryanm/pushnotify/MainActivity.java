@@ -9,25 +9,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.ryanm.pushnotify.DataTypes.SportEventCollection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import static com.example.ryanm.pushnotify.R.id.activity_main_swipe_refresh_layout;
 import static com.example.ryanm.pushnotify.R.id.bottom_navigation;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent = new Intent(this, RegistrationService.class);
         startService(intent);
-
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(bottom_navigation);
@@ -59,14 +48,13 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_clubs:
 
                     case R.id.action_other:
-
                 }
                 return true;
             }
         });
+
         new RetrieveData().execute();
 
-        //Set Listener of SwipeRefreshLayout
         swipe = (SwipeRefreshLayout)findViewById(R.id.activity_main_swipe_refresh_layout);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -74,18 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 new RetrieveData().execute();
             }
         });
-    }
-
-    /**
-     * Android is weird with JSON's, this conditions JSON for deserialiation
-     * @param json JSON to convert to Android JSON format
-     * @return string of converted JSON
-     */
-    public static String cleanJson(String json)
-    {
-        json = json.substring(1,json.length()-1);
-        json = json.replace("\\", "");
-        return json;
     }
 
     /**
@@ -135,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 layout.addView(view);
             }
             else {
-                response = cleanJson(response);
+                response = DBInteraction.cleanJson(response);
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
                 SportEventCollection Events;
                 Events = gson.fromJson(response, SportEventCollection.class);
