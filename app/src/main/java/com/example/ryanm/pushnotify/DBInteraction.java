@@ -17,6 +17,18 @@ public class DBInteraction {
     {
     }
 
+    /**
+     * Android is weird with JSON's, this conditions JSON for deserialiation
+     * @param json JSON to convert to Android JSON format
+     * @return string of converted JSON
+     */
+    public static String cleanJson(String json)
+    {
+        json = json.substring(1,json.length()-1);
+        json = json.replace("\\", "");
+        return json;
+    }
+
     public void SendData(String [] http)
     {
         new SendTheData().execute(http);

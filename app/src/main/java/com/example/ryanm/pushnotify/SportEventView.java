@@ -35,20 +35,20 @@ public class SportEventView extends View {
     /* Text Drawing */
     private TextPaint mTextPaint;
     private Point mTextOrigin;
+    private Paint paint= new Paint();
+    private Paint paint2= new Paint();
+    private int width;
     private int mSpacing;
     private float textWidth;
 
     public SportEventView(Context context) {
         super(context);
-
         init(context);
     }
 
     private void init(Context context){
         mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setTextSize(40);
-        //TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SportEventView, 0, 0);
-
+        mTextPaint.setTextSize(50);
         if(home)
         {
             mTextPaint.setColor(ContextCompat.getColor(context,R.color.blue));
@@ -57,12 +57,7 @@ public class SportEventView extends View {
         {
             mTextPaint.setColor(Color.BLACK);
         }
-
-
-
         mTextOrigin = new Point(0, 0);
-
-
     }
 
     public void setIsHome(boolean is_home)
@@ -73,6 +68,7 @@ public class SportEventView extends View {
 
     public void setEvent(SportEvent Event)
     {
+        SportEventID = Event.Sport.SportID;
         sport = Event.Sport.Name;
         opponent = Event.Opponent;
         scoretime = Event.Result;
@@ -85,7 +81,6 @@ public class SportEventView extends View {
     private void updateData()
     {
         CharSequence title = sport + " vs. " + opponent;
-
         textWidth = mTextPaint.measureText(title, 0, title.length());
         sportLayout = new StaticLayout(title, mTextPaint, (int)textWidth,
                 Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
@@ -93,27 +88,24 @@ public class SportEventView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // Try for a width based on our minimum
         int minw = getPaddingLeft() + getPaddingRight() + getSuggestedMinimumWidth() + (int)textWidth + 20;
+        width = MeasureSpec.getSize(widthMeasureSpec);
         int w = resolveSizeAndState(minw, widthMeasureSpec, 1);
-
-        // Whatever the width ends up being, ask for a height that would let the pie
-        // get as big as it can
-        int h = resolveSizeAndState(50, heightMeasureSpec, 0);
-
+        int h = resolveSizeAndState(300, heightMeasureSpec, 0);
         setMeasuredDimension(w, h);
     }
 
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-
+        paint.setColor(Color.LTGRAY);
+        paint2.setColor(Color.GRAY);
+        canvas.drawRect(0,0,width,20,paint2);
+        canvas.drawRect(0,20,width,300,paint);
         if (sportLayout != null) {
             canvas.save();
-            canvas.translate(20,0);
+            canvas.translate(20,30);
             sportLayout.draw(canvas);
-
             canvas.restore();
         }
-
     }
 }
