@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.example.ryanm.pushnotify.DataTypes.SportEventCollection;
 import com.google.gson.Gson;
@@ -20,8 +21,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import static com.example.ryanm.pushnotify.R.id.bottom_navigation;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ScrollListener {
     private SwipeRefreshLayout swipe;
+    private CustomScrollView scroll;
+    private static int dataIndex = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,28 +56,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        new RetrieveData().execute();
+        new RetrieveData().execute(0);
 
         swipe = (SwipeRefreshLayout)findViewById(R.id.activity_main_swipe_refresh_layout);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new RetrieveData().execute();
+                new RetrieveData().execute(0);
+                dataIndex = 0;
             }
         });
+
+        scroll = (CustomScrollView) findViewById(R.id.myscroll);
+        scroll.setScrollViewListener(this);
+    }
+
+    @Override
+    public void onScrollBottomedOut()
+    {
+        dataIndex++;
+        System.out.println("Getting more data");
+        new RetrieveData().execute(dataIndex);
     }
 
     /**
      * Get SportEvent Data (closest 10 to today's date)
      *
      */
-    class RetrieveData extends AsyncTask<Void, Void, String> {
+    class RetrieveData extends AsyncTask<Integer, Void, String> {
+        int index = 0;
         protected void onPreExecute() {
+
         }
 
-        protected String doInBackground(Void... urls){
+        protected String doInBackground(Integer... position){
+            index = position[0];
             try {
-                URL url = new URL(DBInteraction.api_url + "api/sportevent/getfutureevents");
+                URL url = new URL(DBInteraction.api_url + "api/sportevent/getfutureevents/" + index);
                 System.out.println(url.toString());
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -102,8 +120,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String response) {
-            LinearLayout layout = (LinearLayout)findViewById(R.id.sport_events);
-            layout.removeAllViews();
+            LinearLayout layout= (LinearLayout)findViewById(R.id.sport_events);
+            if(index == 0) {
+                layout.removeAllViews();
+            }
 
             if(response == null) {
                 TextView view = new TextView(getApplicationContext());

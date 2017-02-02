@@ -97,8 +97,8 @@ public class SportEventView extends View {
 
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        paint.setColor(Color.LTGRAY);
-        paint2.setColor(Color.GRAY);
+        paint.setColor(Color.WHITE);
+        paint2.setColor(Color.LTGRAY);
         canvas.drawRect(0,0,width,20,paint2);
         canvas.drawRect(0,20,width,300,paint);
         if (sportLayout != null) {

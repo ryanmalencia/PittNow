@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_above="@id/bottom_navigation">
-        <ScrollView
+        <com.example.ryanm.pushnotify.CustomScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/myscroll">
@@ -34,7 +34,7 @@
                 android:orientation="vertical"
                 android:id="@+id/sport_events">
             </LinearLayout>
-        </ScrollView>
+        </com.example.ryanm.pushnotify.CustomScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
