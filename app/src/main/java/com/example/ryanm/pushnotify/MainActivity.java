@@ -9,7 +9,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.example.ryanm.pushnotify.DataTypes.SportEventCollection;
@@ -24,6 +26,8 @@ import static com.example.ryanm.pushnotify.R.id.bottom_navigation;
 public class MainActivity extends AppCompatActivity implements ScrollListener {
     private SwipeRefreshLayout swipe;
     private CustomScrollView scroll;
+    private ProgressBar status;
+    public static boolean finishedGet = true;
     private static int dataIndex = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
         setContentView(R.layout.activity_main);
         Intent intent = new Intent(this, RegistrationService.class);
         startService(intent);
-
+        status = (ProgressBar) findViewById(R.id.status);
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(bottom_navigation);
 
@@ -69,14 +73,19 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
 
         scroll = (CustomScrollView) findViewById(R.id.myscroll);
         scroll.setScrollViewListener(this);
+
+
     }
 
     @Override
     public void onScrollBottomedOut()
     {
-        dataIndex++;
-        System.out.println("Getting more data");
-        new RetrieveData().execute(dataIndex);
+        if(finishedGet) {
+            finishedGet = false;
+            dataIndex++;
+            System.out.println("Getting more data");
+            new RetrieveData().execute(dataIndex);
+        }
     }
 
     /**
@@ -86,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
     class RetrieveData extends AsyncTask<Integer, Void, String> {
         int index = 0;
         protected void onPreExecute() {
-
+            status.setVisibility(View.VISIBLE);
         }
 
         protected String doInBackground(Integer... position){
@@ -120,14 +129,16 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
         }
 
         protected void onPostExecute(String response) {
+            System.out.println(index);
             LinearLayout layout= (LinearLayout)findViewById(R.id.sport_events);
             if(index == 0) {
-                layout.removeAllViews();
+                layout.removeViews(0,layout.getChildCount()-1);
             }
 
             if(response == null) {
                 TextView view = new TextView(getApplicationContext());
                 view.setText("Error getting data");
+                layout.removeViews(0,layout.getChildCount()-1);
                 layout.addView(view);
             }
             else {
@@ -140,10 +151,12 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                     SportEventView temp = new SportEventView(getApplicationContext());
                     temp.setIsHome(true);
                     temp.setEvent(Events.Events[i]);
-                    layout.addView(temp);
+                    layout.addView(temp,layout.getChildCount()-1);
                 }
             }
+            finishedGet = true;
             swipe.setRefreshing(false);
+            status.setVisibility(View.GONE);
         }
     }
 }

@@ -33,8 +33,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/sport_events">
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:layout_gravity="center"
+                    android:id="@+id/status"/>
             </LinearLayout>
         </com.example.ryanm.pushnotify.CustomScrollView>
+
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
