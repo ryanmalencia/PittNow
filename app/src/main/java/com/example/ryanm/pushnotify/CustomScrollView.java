@@ -7,8 +7,9 @@ import android.widget.ScrollView;
 
 public class CustomScrollView extends ScrollView {
     private ScrollListener scrollViewListener = null;
+
     public CustomScrollView(Context context, AttributeSet attrs,
-                                 int defStyle) {
+                            int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -25,16 +26,14 @@ public class CustomScrollView extends ScrollView {
     }
 
     @Override
-    protected void onScrollChanged(int l, int t, int oldl, int oldt)
-    {
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
 
-        View view = (View) getChildAt(getChildCount()-1);
+        View view = getChildAt(getChildCount() - 1);
 
-        int diff = (view.getBottom()-(getHeight()+getScrollY()));
+        int diff = (view.getBottom() - (getHeight() + getScrollY()));
 
         // if diff is zero, then the bottom has been reached
-        if( diff <= 0 && scrollViewListener != null)
-        {
+        if (diff <= 300 && scrollViewListener != null) {
             scrollViewListener.onScrollBottomedOut();
         }
 

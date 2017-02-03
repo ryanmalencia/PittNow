@@ -17,7 +17,6 @@
         app:itemTextColor="@drawable/state"
         app:menu="@menu/bottom_navigation_main" />
 
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/activity_main_swipe_refresh_layout"
         android:layout_width="match_parent"
@@ -41,8 +40,5 @@
                     android:id="@+id/status"/>
             </LinearLayout>
         </com.example.ryanm.pushnotify.CustomScrollView>
-
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
 
 
     }
+
 
     @Override
     public void onScrollBottomedOut()
