@@ -74,18 +74,13 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
 
         scroll = (CustomScrollView) findViewById(R.id.myscroll);
         scroll.setScrollViewListener(this);
-
-
     }
-
 
     @Override
     public void onScrollBottomedOut()
     {
         if(finishedGet) {
             finishedGet = false;
-            dataIndex++;
-            System.out.println("Getting more data");
             new RetrieveData().execute(dataIndex);
         }
     }
@@ -104,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
             index = position[0];
             try {
                 URL url = new URL(DBInteraction.api_url + "api/sportevent/getfutureevents/" + index);
-                System.out.println(url.toString());
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -148,6 +142,10 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
                 SportEventCollection Events;
                 Events = gson.fromJson(response, SportEventCollection.class);
+                if(Events.Events.length >0)
+                {
+                    dataIndex++;
+                }
                 for(int i = 0; i < Events.Events.length ; i++)
                 {
                     SportEventView temp = new SportEventView(getApplicationContext());

@@ -10,6 +10,7 @@ public class SportEvent {
     public String Result;
     public String Location;
     public String Broadcast;
+    public String ImageLoc;
     public Date Date;
 
     public Sport Sport;
