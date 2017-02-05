@@ -69,7 +69,7 @@ public class SportEventView extends View {
     private void init(Context context){
         mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize(50);
-        school_image = BitmapFactory.decodeResource(getResources(), R.mipmap.unknown);
+        //school_image = BitmapFactory.decodeResource(getResources(), R.mipmap.unknown);
 
         if(home)
         {
@@ -168,7 +168,10 @@ public class SportEventView extends View {
             sport_image.draw(canvas);
         }
 
-        canvas.drawBitmap(school_image,width-215, height/4+10,png);
+        if(school_image != null)
+        {
+            canvas.drawBitmap(school_image,width-215, height/4+10,png);
+        }
 
         if (sportLayout != null) {
             canvas.save();
