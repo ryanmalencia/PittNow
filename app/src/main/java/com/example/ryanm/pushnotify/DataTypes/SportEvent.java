@@ -12,6 +12,7 @@ public class SportEvent {
     public String Broadcast;
     public String ImageLoc;
     public Date Date;
+    public Boolean Home;
 
     public Sport Sport;
 

@@ -3,11 +3,9 @@ package com.example.ryanm.pushnotify;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.OverScroller;
 import android.widget.ScrollView;
 
 public class CustomScrollView extends ScrollView {
-    private OverScroller mScroller;
     private ScrollListener scrollViewListener = null;
 
     public CustomScrollView(Context context, AttributeSet attrs,
@@ -28,19 +26,13 @@ public class CustomScrollView extends ScrollView {
     }
 
     @Override
-    protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY)
-    {
-        super.onOverScrolled(scrollX, scrollY, false, false);
-    }
-
-    @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
 
         View view = getChildAt(getChildCount() - 1);
 
         int diff = (view.getBottom() - (getHeight() + getScrollY()));
 
-        if (diff <= getHeight()/2 && scrollViewListener != null) {
+        if (diff <= 400 && scrollViewListener != null) {
             scrollViewListener.onScrollBottomedOut();
         }
     }
