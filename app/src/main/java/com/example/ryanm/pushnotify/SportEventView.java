@@ -242,7 +242,7 @@ public class SportEventView extends View {
         super.onDraw(canvas);
         paint.setColor(Color.WHITE);
         paint2.setColor(Color.LTGRAY);
-        paint3.setColor(ContextCompat.getColor(context,R.color.checkedgreen));
+        paint3.setColor(ContextCompat.getColor(context,R.color.gold));
         canvas.drawRect(0,0,width,20,paint2);
         canvas.drawRect(0,20,width,450,paint);
         canvas.drawRect(0,300,width,302,paint2);
