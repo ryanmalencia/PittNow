@@ -8,4 +8,5 @@
     <color name="blue">#1c2957</color>
     <color name="gray">#aaaaaa</color>
     <color name="lightgray">#cccccc</color>
+    <color name="checkedgreen">#00da00</color>
 </resources>

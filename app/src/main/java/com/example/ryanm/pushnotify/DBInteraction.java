@@ -36,10 +36,6 @@ public class DBInteraction {
     void GetData(String [] http){ new GetTheData().execute(http); }
 
     private class SendTheData extends AsyncTask<String, Void, Void> {
-        protected void onPreExecute() {
-
-        }
-
         protected Void doInBackground(String... information) {
             int vars = information.length;
             String api_call = null;

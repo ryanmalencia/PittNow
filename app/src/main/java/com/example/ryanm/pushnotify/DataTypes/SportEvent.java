@@ -13,6 +13,7 @@ public class SportEvent {
     public String ImageLoc;
     public Date Date;
     public Boolean Home;
+    public int Going;
 
     public Sport Sport;
 

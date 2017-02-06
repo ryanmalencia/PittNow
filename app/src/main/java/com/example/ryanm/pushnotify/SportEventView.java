@@ -16,10 +16,13 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.ryanm.pushnotify.ApiCalls.SportEventAPI;
 import com.example.ryanm.pushnotify.DataTypes.SportEvent;
 import com.example.ryanm.pushnotify.DataTypes.SportEventCollection;
 import com.google.gson.Gson;
@@ -29,14 +32,21 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class SportEventView extends View {
     public int SportEventID;
     private boolean home = true;
+    private boolean is_going = false;
+    private Date date;
     private Bitmap school_image;
     private Drawable sport_image;
     private Context context;
@@ -47,6 +57,7 @@ public class SportEventView extends View {
     private CharSequence location;
     private CharSequence broadcast;
     private CharSequence going;
+    private CharSequence dateString;
     private CharSequence youGoing;
     private StaticLayout sportLayout;
     private StaticLayout goingLayout;
@@ -55,20 +66,26 @@ public class SportEventView extends View {
     private StaticLayout scoretimeLayout;
     private StaticLayout locationLayout;
     private StaticLayout broadcastLayout;
+    private StaticLayout dateLayout;
     private TextPaint mTextPaint;
     private TextPaint scoretimePaint;
     private TextPaint locationPaint;
     private TextPaint goingPaint;
     private TextPaint yougoingPaint;
-    private Point mTextOrigin;
     private Paint paint= new Paint();
     private Paint paint2= new Paint();
+    private Paint paint3= new Paint();
     private Paint png = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private GestureDetector mDetector;
     private int width;
     private int height;
+    private int number_going;
     private float textWidth;
+    private float titletextWidth;
+    private float datetextWidth;
     private float goingtextWidth;
     private float yougoingtextWidth;
+    private SportEventAPI sportEventAPI;
 
     public SportEventView(Context context) {
         super(context);
@@ -87,7 +104,8 @@ public class SportEventView extends View {
         goingPaint.setTextSize(50);
         yougoingPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         yougoingPaint.setTextSize(50);
-        mTextOrigin = new Point(0, 0);
+        mDetector = new GestureDetector(context,new mListener());
+        sportEventAPI = new SportEventAPI();
     }
 
     public void setIsHome(boolean is_home)
@@ -98,9 +116,8 @@ public class SportEventView extends View {
 
     public void setEvent(SportEvent Event)
     {
-        going = 10023 + " Are Going";
         youGoing = "Going?";
-        SportEventID = Event.Sport.SportID;
+        SportEventID = Event.SportEventID;
         sport = Event.Sport.Name;
         opponent = Event.Opponent;
         scoretime = Event.Result;
@@ -108,6 +125,9 @@ public class SportEventView extends View {
         broadcast = Event.Broadcast;
         imageloc = Event.ImageLoc;
         home = Event.Home;
+        date = Event.Date;
+        number_going = Event.Going;
+
         switch(sport.toString()){
             case "Women's Basketball":
                 sport_image = ContextCompat.getDrawable(context,R.drawable.ic_basketball);
@@ -136,6 +156,34 @@ public class SportEventView extends View {
             case "Tennis":
                 sport_image = ContextCompat.getDrawable(context,R.drawable.ic_tennis);
                 break;
+            case "Swimming & Diving":
+                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_swimming);
+                break;
+            case "Swimming":
+                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_swimming);
+                break;
+            case "Diving":
+                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_swimming);
+                break;
+            case "Women's Gymnastics":
+                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_gymnastics);
+                break;
+            case "Men's Gymnastics":
+                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_gymnastics);
+                break;
+            case "Gymnastics":
+                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_gymnastics);
+                break;
+            case "Wrestling":
+                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_wrestling);
+                break;
+            case "Men's Wrestling":
+                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_wrestling);
+                break;
+            case "Women's Wrestling":
+                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_wrestling);
+                break;
+
         }
         File image_file = new File(context.getCacheDir(),opponent.toString().trim());
         System.out.println(image_file.getAbsolutePath());
@@ -143,7 +191,7 @@ public class SportEventView extends View {
             new RetrieveData().execute(imageloc);
         }
         else{
-            new ReadFile().execute(image_file.getAbsolutePath());
+            new ReadBitmapFile().execute(image_file.getAbsolutePath());
         }
         if(home) {
             mTextPaint.setColor(ContextCompat.getColor(context,R.color.gold));
@@ -151,16 +199,25 @@ public class SportEventView extends View {
         else {
             mTextPaint.setColor(ContextCompat.getColor(context,R.color.blue));
         }
+        dateString = DateFormat.getDateInstance().format(date) + ", ";
+        scoretime = dateString.toString() + scoretime.toString();
+        new CheckGoingFile().execute(SportEventID);
         updateData();
         invalidate();
     }
 
     private void updateData()
     {
+        if(number_going != 1) {
+            going = number_going + " Are Going";
+        }
+        else{
+            going = number_going + " Is Going";
+        }
+
         CharSequence title = sport + " vs. " + opponent;
-        textWidth = mTextPaint.measureText(title, 0, title.length());
-        sportLayout = new StaticLayout(title, mTextPaint, (int)textWidth,
-                Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+        titletextWidth = mTextPaint.measureText(title, 0, title.length());
+        sportLayout = new StaticLayout(title, mTextPaint, (int)titletextWidth, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
         textWidth = scoretimePaint.measureText(scoretime, 0, scoretime.length());
         scoretimeLayout = new StaticLayout(scoretime,scoretimePaint,(int)textWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
         textWidth = locationPaint.measureText(location, 0, location.length());
@@ -185,24 +242,29 @@ public class SportEventView extends View {
         super.onDraw(canvas);
         paint.setColor(Color.WHITE);
         paint2.setColor(Color.LTGRAY);
+        paint3.setColor(ContextCompat.getColor(context,R.color.checkedgreen));
         canvas.drawRect(0,0,width,20,paint2);
         canvas.drawRect(0,20,width,450,paint);
         canvas.drawRect(0,300,width,302,paint2);
         canvas.drawRect(width/2,302,width/2+2,450,paint2);
+        if(is_going) {
+            canvas.drawRect(width/2+1,302,width,450,paint3);
+        }
+        if (sportLayout != null) {
+
+            canvas.save();
+            canvas.translate(20, 30);
+            sportLayout.draw(canvas);
+            canvas.restore();
+        }
+        canvas.drawRect(width*13/16,20,width,150,paint);
+        if(school_image != null){
+            canvas.drawBitmap(school_image,width-435, (height-150)/4+10,png);
+        }
         if(sport_image != null) {
-            //sport_image.setBounds(canvas.getWidth() - canvas.getHeight(), 50, canvas.getWidth() - 30, (canvas.getHeight()) - 30);
             sport_image.setBounds(canvas.getWidth() - canvas.getHeight() + 200,50,canvas.getWidth() - 30,(canvas.getHeight()-100) -80);
             sport_image.setColorFilter(ContextCompat.getColor(context, R.color.lightgray), PorterDuff.Mode.SRC_IN);
             sport_image.draw(canvas);
-        }
-        if(school_image != null){
-            canvas.drawBitmap(school_image,width-215, (height-150)/4+10,png);
-        }
-        if (sportLayout != null) {
-            canvas.save();
-            canvas.translate(20,30);
-            sportLayout.draw(canvas);
-            canvas.restore();
         }
         if (locationLayout != null) {
             canvas.save();
@@ -283,7 +345,7 @@ public class SportEventView extends View {
         }
     }
 
-    class ReadFile extends AsyncTask<String, Void, Bitmap> {
+    class ReadBitmapFile extends AsyncTask<String, Void, Bitmap> {
         protected void onPreExecute() {
         }
         protected Bitmap doInBackground(String... location){
@@ -305,6 +367,91 @@ public class SportEventView extends View {
             else{
                 System.out.println("Unable to read file");
             }
+        }
+    }
+
+    class ToggleFile extends AsyncTask<Integer, Void, Void> {
+        protected void onPreExecute() {
+        }
+        protected Void doInBackground(Integer... location){
+            String filename = location[0].toString();
+            File file = new File(context.getFilesDir() + filename);
+
+            if(file.exists()) {
+                Boolean success = file.delete();
+                if(success) {
+                    System.out.println("Deleted file");
+                }
+            }
+            else {
+                try {
+                    Boolean success = file.createNewFile();
+                    if(success){
+                        System.out.println("Created file");
+                    }
+                }catch (IOException e){
+                    System.out.println("Failed to create file");
+                }
+            }
+            return null;
+        }
+    }
+
+    class CheckGoingFile extends AsyncTask<Integer, Void, Boolean> {
+        protected Boolean doInBackground(Integer... location){
+            String filename = location[0].toString();
+            File file = new File(context.getFilesDir() + filename);
+
+            if(file.exists()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        protected void onPostExecute(Boolean response) {
+            if(response) {
+                is_going = true;
+                youGoing = "Going!";
+                updateData();
+                invalidate();
+            }
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean result = mDetector.onTouchEvent(event);
+        return result;
+    }
+
+    class mListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+        @Override
+        public boolean onSingleTapUp(MotionEvent event) {
+            if(event.getX() >= width/2 && event.getY() >= 302){
+
+                if(is_going) {
+                    number_going--;
+                    is_going = false;
+                    youGoing = "Going?";
+                    sportEventAPI.MinusOneGoing(SportEventID);
+                    new ToggleFile().execute(SportEventID);
+                }
+                else{
+                    number_going++;
+                    is_going = true;
+                    youGoing = "Going!";
+                    sportEventAPI.AddOneGoing(SportEventID);
+                    new ToggleFile().execute(SportEventID);
+                }
+                updateData();
+                invalidate();
+            }
+            return true;
         }
     }
 }
