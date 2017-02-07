@@ -11,7 +11,12 @@
           "package_name": "com.example.ryanm.pushnotify"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "805401383423-3nnpgunmsiel7i7uansl0j6eq0c44g3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAdslkPuLpM1yGHwF-_vxcj5LWqfpMF9nU"
