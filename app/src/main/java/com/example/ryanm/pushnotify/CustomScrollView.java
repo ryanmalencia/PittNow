@@ -28,11 +28,12 @@ public class CustomScrollView extends ScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
 
+
         View view = getChildAt(getChildCount() - 1);
 
         int diff = (view.getBottom() - (getHeight() + getScrollY()));
 
-        if (diff <= 600 && scrollViewListener != null) {
+        if (diff <= 1000 && scrollViewListener != null) {
             scrollViewListener.onScrollBottomedOut();
         }
     }
