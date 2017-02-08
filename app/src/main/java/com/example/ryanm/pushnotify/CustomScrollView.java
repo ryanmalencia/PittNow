@@ -33,7 +33,7 @@ public class CustomScrollView extends ScrollView {
 
         int diff = (view.getBottom() - (getHeight() + getScrollY()));
 
-        if (diff <= 1000 && scrollViewListener != null) {
+        if (diff <= 0 && scrollViewListener != null) {
             scrollViewListener.onScrollBottomedOut();
         }
     }
