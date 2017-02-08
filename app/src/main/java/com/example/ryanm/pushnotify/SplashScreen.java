@@ -12,9 +12,11 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String filename = "auth";
+        String filename = "/auth";
 
         File file = new File(getFilesDir() + filename);
+
+        System.out.println(file.getAbsoluteFile());
 
         if(!file.exists()) {
             Intent intent = new Intent(this, SignIn.class);

@@ -12,6 +12,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -186,7 +187,6 @@ public class SportEventView extends View {
 
         }
         File image_file = new File(context.getCacheDir(),opponent.toString().trim());
-        System.out.println(image_file.getAbsolutePath());
         if(!image_file.exists()) {
             new RetrieveData().execute(imageloc);
         }
@@ -322,7 +322,6 @@ public class SportEventView extends View {
             if(response != null) {
                 try{
                     String fileName = opponent.toString();
-                    System.out.println(fileName);
                     File temp = new File(context.getCacheDir(),fileName.trim());
                     boolean created = temp.createNewFile();
                     if(created) {
@@ -330,7 +329,6 @@ public class SportEventView extends View {
                         outputStream = new FileOutputStream(temp.getAbsolutePath());
                         response.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
                         outputStream.close();
-                        System.out.println("New file added");
                     }
                     else{
                         System.out.println("File creation failed");
@@ -386,9 +384,6 @@ public class SportEventView extends View {
             else {
                 try {
                     Boolean success = file.createNewFile();
-                    if(success){
-                        System.out.println("Created file");
-                    }
                 }catch (IOException e){
                     System.out.println("Failed to create file");
                 }
@@ -421,8 +416,7 @@ public class SportEventView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        boolean result = mDetector.onTouchEvent(event);
-        return result;
+        return mDetector.onTouchEvent(event);
     }
 
     class mListener extends GestureDetector.SimpleOnGestureListener {
@@ -433,7 +427,6 @@ public class SportEventView extends View {
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
             if(event.getX() >= width/2 && event.getY() >= 302){
-
                 if(is_going) {
                     number_going--;
                     is_going = false;

@@ -1,10 +1,12 @@
 package com.example.ryanm.pushnotify;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-
+import com.example.ryanm.pushnotify.ApiCalls.UserAPI;
+import com.example.ryanm.pushnotify.DataTypes.User;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -12,10 +14,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener{
     private GoogleApiClient mGoogleApiClient;
@@ -89,13 +96,63 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 }catch (IOException e){
                     System.out.println("File not written");
                 }
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                if(id != null)
+                {
+                    new AddUser().execute(id);
+                }
             }
         }
         else {
             System.out.println("Failed to sign in");
+        }
+    }
+
+    class AddUser extends AsyncTask<String, Void, Void> {
+        protected Void doInBackground(String... theuser){
+            try {
+                String the_user = theuser[0];
+                URL url = new URL(DBInteraction.api_url + "api/user/get/" + the_user);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+                StringBuilder sb = new StringBuilder();
+                try{
+                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+                    String line;
+                    while((line = br.readLine()) != null)
+                    {
+                        sb.append(line);
+                    }
+                    br.close();
+                }
+                finally{
+                    urlConnection.disconnect();
+                }
+
+                String response = sb.toString();
+                response = DBInteraction.cleanJson(response);
+                Gson gson = new GsonBuilder().create();
+                User user = gson.fromJson(response, User.class);
+
+                if(user.UserID == 0) {
+                    user = new User(the_user);
+                    UserAPI userAPI = new UserAPI();
+                    userAPI.Add(user);
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Void response) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 }
