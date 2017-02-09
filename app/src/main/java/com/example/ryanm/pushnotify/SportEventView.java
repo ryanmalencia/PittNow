@@ -199,6 +199,9 @@ public class SportEventView extends View {
         else {
             mTextPaint.setColor(ContextCompat.getColor(context,R.color.blue));
         }
+        if(!broadcast.toString().trim().equals("")){
+            broadcast = "Watch on " + broadcast;
+        }
         dateString = DateFormat.getDateInstance().format(date) + ", ";
         scoretime = dateString.toString() + scoretime.toString();
         new CheckGoingFile().execute(SportEventID);
@@ -226,6 +229,8 @@ public class SportEventView extends View {
         goingLayout = new StaticLayout(going,goingPaint,(int)goingtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
         yougoingtextWidth = yougoingPaint.measureText(youGoing, 0, youGoing.length());
         yougoingLayout = new StaticLayout(youGoing,yougoingPaint,(int)yougoingtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+        textWidth = locationPaint.measureText(broadcast, 0, broadcast.length());
+        broadcastLayout = new StaticLayout(broadcast,locationPaint,(int)textWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
     }
 
     @Override
@@ -276,6 +281,12 @@ public class SportEventView extends View {
             canvas.save();
             canvas.translate(20,145);
             scoretimeLayout.draw(canvas);
+            canvas.restore();
+        }
+        if (broadcastLayout != null) {
+            canvas.save();
+            canvas.translate(20,200);
+            broadcastLayout.draw(canvas);
             canvas.restore();
         }
         if (goingLayout != null) {
