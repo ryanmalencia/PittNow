@@ -31,7 +31,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this , this)
@@ -40,7 +39,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-
     }
 
     @Override
@@ -49,9 +47,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult result)
-    {
-
+    public void onConnectionFailed(ConnectionResult result) {
     }
 
     private void signIn() {
@@ -64,7 +60,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         System.out.println("got result");
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
@@ -73,9 +68,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-
             if(acct != null) {
                 String id = acct.getId();
                 String name = acct.getDisplayName();
@@ -96,8 +89,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 }catch (IOException e){
                     System.out.println("File not written");
                 }
-                if(id != null)
-                {
+                if(id != null) {
                     new AddUser().execute(id);
                 }
             }
@@ -118,7 +110,6 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 StringBuilder sb = new StringBuilder();
                 try{
                     BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
                     String line;
                     while((line = br.readLine()) != null)
                     {
@@ -135,11 +126,39 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 Gson gson = new GsonBuilder().create();
                 User user = gson.fromJson(response, User.class);
 
-                if(user.UserID == 0) {
+                while(user.UserID == 0) {
                     user = new User(the_user);
                     UserAPI userAPI = new UserAPI();
                     userAPI.Add(user);
+
+
+                    urlConnection.connect();
+                    sb = new StringBuilder();
+                    try{
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                        String line;
+                        while((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+                    }
+                    finally{
+                        urlConnection.disconnect();
+                    }
+
+                    response = sb.toString();
+                    response = DBInteraction.cleanJson(response);
+                    gson = new GsonBuilder().create();
+                    user = gson.fromJson(response, User.class);
                 }
+
+                FileOutputStream fos = openFileOutput("userid", MODE_PRIVATE);
+                OutputStreamWriter osw = new OutputStreamWriter(fos);
+                String write = "" + user.UserID;
+                osw.write(write);
+                osw.close();
+                fos.close();
+
                 return null;
             }
             catch (Exception e)

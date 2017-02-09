@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.example.ryanm.pushnotify.ApiCalls.RegIDAPI;
 import com.example.ryanm.pushnotify.DataTypes.AppDevice;
+import com.example.ryanm.pushnotify.DataTypes.DeviceEnvironment;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -27,9 +28,9 @@ public class RegistrationService extends IntentService{
     @Override
     protected void onHandleIntent(Intent intent){
         InstanceID myID = InstanceID.getInstance(this);
-
+        DeviceEnvironment environment = new DeviceEnvironment(getApplicationContext());
         RegIDAPI regIDAPI = new RegIDAPI();
-
+        int UserID = environment.GetUserID();
         try {
             String registrationToken = myID.getToken(
                     getString(R.string.gcm_defaultSenderId),
@@ -38,30 +39,25 @@ public class RegistrationService extends IntentService{
             );
 
             File reg_file = new File(getApplicationContext().getFilesDir() + "/" + reg_id_file);
-
-            //If RegID file exists, read it and make sure it has not changed
             if(reg_file.exists()) {
                 InputStream fis = getApplicationContext().openFileInput(reg_id_file);
                 InputStreamReader isr = new InputStreamReader(fis);
                 BufferedReader buff_reader = new BufferedReader(isr);
                 String ID = buff_reader.readLine();
-                //If RegID has changed, delete old one from DB, add new one
                 if(!ID.equals(registrationToken))
                 {
-                    regIDAPI.DeleteID(new AppDevice(ID));
+                    regIDAPI.DeleteID(new AppDevice(ID,UserID));
                     writeNewFile(registrationToken);
                 }
-                regIDAPI.AddNewDevice(new AppDevice(registrationToken));
+                regIDAPI.AddNewDevice(new AppDevice(registrationToken,UserID));
                 buff_reader.close();
                 isr.close();
                 fis.close();
             }
-            //If RegID file does not exist, write a new file with the RegID
             else{
-                regIDAPI.AddNewDevice(new AppDevice(registrationToken));
+                regIDAPI.AddNewDevice(new AppDevice(registrationToken,UserID));
                 writeNewFile(registrationToken);
             }
-
             GcmPubSub subscription = GcmPubSub.getInstance(this);
             subscription.subscribe(registrationToken, "/topics/test", null);
         }catch (IOException e){

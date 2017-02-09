@@ -25,7 +25,9 @@ import android.widget.TextView;
 
 import com.example.ryanm.pushnotify.ApiCalls.SportEventAPI;
 import com.example.ryanm.pushnotify.DataTypes.SportEvent;
+import com.example.ryanm.pushnotify.DataTypes.SportEventAttend;
 import com.example.ryanm.pushnotify.DataTypes.SportEventCollection;
+import com.example.ryanm.pushnotify.DataTypes.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -81,6 +83,7 @@ public class SportEventView extends View {
     private int width;
     private int height;
     private int number_going;
+    private int User = 0;
     private float textWidth;
     private float titletextWidth;
     private float datetextWidth;
@@ -115,8 +118,9 @@ public class SportEventView extends View {
         invalidate();
     }
 
-    public void setEvent(SportEvent Event)
+    public void setEvent(SportEvent Event, int User)
     {
+        this.User = User;
         youGoing = "Going?";
         SportEventID = Event.SportEventID;
         sport = Event.Sport.Name;
@@ -204,7 +208,10 @@ public class SportEventView extends View {
         }
         dateString = DateFormat.getDateInstance().format(date) + ", ";
         scoretime = dateString.toString() + scoretime.toString();
-        new CheckGoingFile().execute(SportEventID);
+        final Integer[] array = new Integer[2];
+        array[0] = SportEventID;
+        array[1] = User;
+        new CheckGoingFile().execute(array);
         updateData();
         invalidate();
     }
@@ -379,7 +386,7 @@ public class SportEventView extends View {
         }
     }
 
-    class ToggleFile extends AsyncTask<Integer, Void, Void> {
+    class Toggle extends AsyncTask<Integer, Void, Void> {
         protected void onPreExecute() {
         }
         protected Void doInBackground(Integer... location){
@@ -406,14 +413,43 @@ public class SportEventView extends View {
     class CheckGoingFile extends AsyncTask<Integer, Void, Boolean> {
         protected Boolean doInBackground(Integer... location){
             String filename = location[0].toString();
-            File file = new File(context.getFilesDir() + filename);
+            int eventID = location[0];
+            int userID = location[1];
+            SportEventAttend attend = new SportEventAttend();
+            try {
+                URL url = new URL(DBInteraction.api_url + "api/sportevent/getattendstatus/" + eventID + "/" + userID);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+                StringBuilder sb = new StringBuilder();
+                try {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    br.close();
+                } finally {
+                    urlConnection.disconnect();
+                }
 
-            if(file.exists()) {
+                String response = sb.toString();
+                response = DBInteraction.cleanJson(response);
+                Gson gson = new GsonBuilder().create();
+                attend = gson.fromJson(response, SportEventAttend.class);
+            }catch(Exception e){
+
+            }
+
+            if(attend.Going)
+            {
+                System.out.println("Going status from server");
                 return true;
             }
-            else {
-                return false;
-            }
+
+            File file = new File(context.getFilesDir() + filename);
+
+            return file.exists();
         }
         protected void onPostExecute(Boolean response) {
             if(response) {
@@ -442,15 +478,15 @@ public class SportEventView extends View {
                     number_going--;
                     is_going = false;
                     youGoing = "Going?";
-                    sportEventAPI.MinusOneGoing(SportEventID);
-                    new ToggleFile().execute(SportEventID);
+                    sportEventAPI.MinusOneGoing(SportEventID, User);
+                    new Toggle().execute(SportEventID);
                 }
                 else{
                     number_going++;
                     is_going = true;
                     youGoing = "Going!";
-                    sportEventAPI.AddOneGoing(SportEventID);
-                    new ToggleFile().execute(SportEventID);
+                    sportEventAPI.AddOneGoing(SportEventID,User);
+                    new Toggle().execute(SportEventID);
                 }
                 updateData();
                 invalidate();

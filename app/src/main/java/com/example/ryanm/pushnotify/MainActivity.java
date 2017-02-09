@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.example.ryanm.pushnotify.DataTypes.DeviceEnvironment;
 import com.example.ryanm.pushnotify.DataTypes.SportEventCollection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
     private SwipeRefreshLayout swipe;
     private CustomScrollView scroll;
     private ProgressBar status;
+    private int UserID;
+    private DeviceEnvironment DevEnv;
     public static boolean finishedGet = true;
     private static int dataIndex = 0;
     @Override
@@ -60,20 +64,27 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 return true;
             }
         });
+        DevEnv = new DeviceEnvironment(getApplicationContext());
+        UserID = DevEnv.GetUserID();
+        System.out.println("Main User ID:" + UserID);
+        final Integer [] array = new Integer[2];
+        array[0] = 0;
+        array[1] = UserID;
 
-        new RetrieveData().execute(0);
+        new RetrieveData().execute(array);
 
         swipe = (SwipeRefreshLayout)findViewById(R.id.activity_main_swipe_refresh_layout);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new RetrieveData().execute(0);
+                new RetrieveData().execute(array);
                 dataIndex = 0;
             }
         });
 
         scroll = (CustomScrollView) findViewById(R.id.myscroll);
         scroll.setScrollViewListener(this);
+
     }
 
     @Override
@@ -91,12 +102,14 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
      */
     class RetrieveData extends AsyncTask<Integer, Void, String> {
         int index = 0;
+        int User = 0;
         protected void onPreExecute() {
             status.setVisibility(View.VISIBLE);
         }
 
         protected String doInBackground(Integer... position){
             index = position[0];
+            User = position[1];
             try {
                 URL url = new URL(DBInteraction.api_url + "api/sportevent/getfutureevents/" + index);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -150,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 {
                     SportEventView temp = new SportEventView(getApplicationContext());
                     temp.setIsHome(true);
-                    temp.setEvent(Events.Events[i]);
+                    temp.setEvent(Events.Events[i],User);
                     layout.addView(temp,layout.getChildCount()-1);
                 }
             }
