@@ -91,8 +91,11 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
     public void onScrollBottomedOut()
     {
         if(finishedGet) {
+            Integer [] array = new Integer[2];
+            array[0] = dataIndex;
+            array[1] = UserID;
             finishedGet = false;
-            new RetrieveData().execute(dataIndex);
+            new RetrieveData().execute(array);
         }
     }
 
