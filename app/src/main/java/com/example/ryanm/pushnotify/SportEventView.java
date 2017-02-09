@@ -295,7 +295,6 @@ public class SportEventView extends View {
         else
         {
             offset = 150;
-            //canvas.drawRect(0,300,width,450,ticketPaint);
             canvas.drawRect(0,300,width,302,paint2);
             if(ticketLayout != null){
                 canvas.save();
