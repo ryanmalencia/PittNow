@@ -162,8 +162,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                     BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line;
-                    while((line = br.readLine()) != null)
-                    {
+                    while((line = br.readLine()) != null) {
                         sb.append(line);
                     }
                     br.close();
@@ -173,8 +172,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                     urlConnection.disconnect();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 System.out.println(e.getMessage());
                 return null;
             }
@@ -198,12 +196,10 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
                 SportEventCollection Events;
                 Events = gson.fromJson(response, SportEventCollection.class);
-                if(Events.Events.length > 0)
-                {
+                if(Events.Events.length > 0) {
                     dataIndex++;
                 }
-                for(int i = 0; i < Events.Events.length ; i++)
-                {
+                for(int i = 0; i < Events.Events.length ; i++) {
                     SportEventView temp = new SportEventView(getApplicationContext());
                     temp.setIsHome(true);
                     temp.setEvent(Events.Events[i],User);
@@ -235,8 +231,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                     BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line;
-                    while((line = br.readLine()) != null)
-                    {
+                    while((line = br.readLine()) != null) {
                         sb.append(line);
                     }
                     br.close();
@@ -246,8 +241,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                     urlConnection.disconnect();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 System.out.println(e.getMessage());
                 return null;
             }
@@ -271,13 +265,12 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
                 ConcertCollection Concerts;
                 Concerts = gson.fromJson(response, ConcertCollection.class);
-                if(Concerts.Concerts.length > 0)
-                {
+                if(Concerts.Concerts.length > 0) {
                     dataIndex++;
                 }
-                for(int i = 0; i < Concerts.Concerts.length ; i++)
-                {
+                for(int i = 0; i < Concerts.Concerts.length ; i++) {
                     ConcertView temp = new ConcertView(getApplicationContext());
+                    temp.setConcert(Concerts.Concerts[i],User);
                     layout.addView(temp,layout.getChildCount()-1);
                 }
             }

@@ -6,15 +6,40 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
+import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.view.GestureDetector;
 import android.view.View;
+
+import com.example.ryanm.pushnotify.DataTypes.Concert;
+
+import java.util.Date;
 
 public class ConcertView extends View {
     public int ConcertID;
     private int User = 0;
-    private int number_going;
+    private int numberGoing;
+    private int offset;
+    private int width;
+    private int height;
+    private boolean ticketAvail = false;
+    private boolean isGoing;
+    private CharSequence band;
+    private Paint paint= new Paint();
+    private Paint paint2= new Paint();
+    private Paint paint3= new Paint();
+    private Paint ticketPaint = new Paint();
+    private Paint png = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private StaticLayout bandLayout;
+    private StaticLayout venueLayout;
+    private StaticLayout yougoingLayout;
+    private StaticLayout datetimeLayout;
+    private StaticLayout ticketLayout;
+    Date date;
+    String imageLoc;
+    String ticketLink;
+    private CharSequence venue;
     private Context context;
+    private TextPaint tickettextPaint;
 
     public ConcertView(Context context) {
         super(context);
@@ -22,11 +47,19 @@ public class ConcertView extends View {
         this.context = context;
     }
 
+    public void setConcert(Concert concert, int User){
+        band = concert.Band;
+        venue = concert.Venue;
+        date = concert.Date;
+        this.User = User;
+    }
+
     private void init(){
-        /*
+
         tickettextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         tickettextPaint.setTextSize(65);
         tickettextPaint.setColor(Color.BLACK);
+        /*
         mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize(50);
         scoretimePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -40,8 +73,25 @@ public class ConcertView extends View {
         */
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int minw = getPaddingLeft() + getPaddingRight() + getSuggestedMinimumWidth() + 20;
+        width = MeasureSpec.getSize(widthMeasureSpec);
+        int w = resolveSizeAndState(minw, widthMeasureSpec, 1);
+        int h;
+        if(!ticketAvail) {
+            h = resolveSizeAndState(450, heightMeasureSpec, 0);
+        }
+        else{
+            h = resolveSizeAndState(600, heightMeasureSpec, 0);
+        }
+
+        height = h;
+        setMeasuredDimension(w, h);
+    }
+
     protected void onDraw(Canvas canvas){
-        /*
+
         super.onDraw(canvas);
         paint.setColor(Color.WHITE);
         paint2.setColor(Color.LTGRAY);
@@ -49,71 +99,18 @@ public class ConcertView extends View {
         ticketPaint.setColor(ContextCompat.getColor(context,R.color.blue));
         canvas.drawRect(0,0,width,20,paint2);
         canvas.drawRect(0, 20, width, 450+offset, paint);
-        if(!getticket) {
+        if(!ticketAvail) {
             offset = 0;
         }
         else
         {
             offset = 150;
             canvas.drawRect(0,300,width,302,paint2);
-            if(ticketLayout != null){
-                canvas.save();
-                canvas.translate(((width)-(int)ticketTextWidth)/2, 375-45);
-                ticketLayout.draw(canvas);
-                canvas.restore();
-            }
         }
         canvas.drawRect(0,300+offset,width,302+offset,paint2);
         canvas.drawRect(width/2,302+offset,width/2+2,450+offset,paint2);
-        if(is_going) {
+        if(isGoing) {
             canvas.drawRect(width/2+1,302+offset,width,450+offset,paint3);
         }
-        if (sportLayout != null) {
-
-            canvas.save();
-            canvas.translate(20, 30);
-            sportLayout.draw(canvas);
-            canvas.restore();
-        }
-        canvas.drawRect(width*13/16,20,width,150,paint);
-        if(school_image != null){
-            canvas.drawBitmap(school_image,width-435, (height-150-offset)/4+10,png);
-        }
-        if(sport_image != null) {
-            sport_image.setBounds(canvas.getWidth() - canvas.getHeight() + 200+offset,50,canvas.getWidth() - 30,(canvas.getHeight()-100) -80 -offset);
-            sport_image.setColorFilter(ContextCompat.getColor(context, R.color.lightgray), PorterDuff.Mode.SRC_IN);
-            sport_image.draw(canvas);
-        }
-        if (locationLayout != null) {
-            canvas.save();
-            canvas.translate(20,90);
-            locationLayout.draw(canvas);
-            canvas.restore();
-        }
-        if (scoretimeLayout != null) {
-            canvas.save();
-            canvas.translate(20,145);
-            scoretimeLayout.draw(canvas);
-            canvas.restore();
-        }
-        if (broadcastLayout != null) {
-            canvas.save();
-            canvas.translate(20,200);
-            broadcastLayout.draw(canvas);
-            canvas.restore();
-        }
-        if (goingLayout != null) {
-            canvas.save();
-            canvas.translate((((width/2)-(int)goingtextWidth)/2),340+offset);
-            goingLayout.draw(canvas);
-            canvas.restore();
-        }
-        if (yougoingLayout != null) {
-            canvas.save();
-            canvas.translate(width/2 + (((width/2)-(int)yougoingtextWidth)/2),340+offset);
-            yougoingLayout.draw(canvas);
-            canvas.restore();
-        }
-        */
     }
 }

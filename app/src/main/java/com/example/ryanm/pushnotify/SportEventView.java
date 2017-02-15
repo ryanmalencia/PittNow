@@ -39,14 +39,14 @@ import java.util.Date;
 public class SportEventView extends View {
     public int SportEventID;
     private boolean home = true;
-    private boolean is_going = false;
-    private boolean getticket = false;
+    private boolean isGoing = false;
+    private boolean ticketAvail = false;
     Date date;
-    private Bitmap school_image;
-    private Drawable sport_image;
+    private Bitmap schoolImage;
+    private Drawable sportImage;
     private Context context;
     private CharSequence sport;
-    String imageloc;
+    String imageLoc;
     private CharSequence opponent;
     private CharSequence scoretime;
     private CharSequence location;
@@ -78,7 +78,7 @@ public class SportEventView extends View {
     private int width;
     private int offset;
     private int height;
-    private int number_going;
+    private int numberGoing;
     private int User = 0;
     private float textWidth;
     float titletextWidth;
@@ -127,79 +127,79 @@ public class SportEventView extends View {
         scoretime = Event.Result;
         location = Event.Location;
         broadcast = Event.Broadcast;
-        imageloc = Event.ImageLoc;
+        imageLoc = Event.ImageLoc;
         home = Event.Home;
         date = Event.Date;
-        number_going = Event.Going;
+        numberGoing = Event.Going;
 
         switch(sport.toString()){
             case "Women's Basketball":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_basketball);
-                getticket = true;
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_basketball);
+                ticketAvail = true;
                 ticketlink = links.WomensBasketball();
                 break;
             case "Men's Basketball":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_basketball);
-                getticket = true;
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_basketball);
+                ticketAvail = true;
                 ticketlink = links.MensBasketball();
                 break;
             case "Basketball":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_basketball);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_basketball);
                 break;
             case "Baseball":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_baseball);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_baseball);
                 break;
             case "Softball":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_baseball);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_baseball);
                 break;
             case "Track":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_track);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_track);
                 break;
             case "Women's Tennis":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_tennis);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_tennis);
                 break;
             case "Men's Tennis":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_tennis);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_tennis);
                 break;
             case "Tennis":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_tennis);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_tennis);
                 break;
             case "Swimming & Diving":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_swimming);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_swimming);
                 break;
             case "Swimming":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_swimming);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_swimming);
                 break;
             case "Diving":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_swimming);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_swimming);
                 break;
             case "Women's Gymnastics":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_gymnastics);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_gymnastics);
                 break;
             case "Men's Gymnastics":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_gymnastics);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_gymnastics);
                 break;
             case "Gymnastics":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_gymnastics);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_gymnastics);
                 break;
             case "Wrestling":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_wrestling);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_wrestling);
                 break;
             case "Men's Wrestling":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_wrestling);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_wrestling);
                 break;
             case "Women's Wrestling":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_wrestling);
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_wrestling);
                 break;
             case "Football":
-                sport_image = ContextCompat.getDrawable(context,R.drawable.ic_football);
-                getticket = true;
+                sportImage = ContextCompat.getDrawable(context,R.drawable.ic_football);
+                ticketAvail = true;
                 ticketlink = links.Football();
                 break;
         }
         File image_file = new File(context.getCacheDir(),opponent.toString().trim());
         if(!image_file.exists()) {
-            new RetrieveData().execute(imageloc);
+            new RetrieveData().execute(imageLoc);
         }
         else{
             new ReadBitmapFile().execute(image_file.getAbsolutePath());
@@ -209,7 +209,7 @@ public class SportEventView extends View {
         }
         else {
             mTextPaint.setColor(ContextCompat.getColor(context,R.color.blue));
-            getticket = false;
+            ticketAvail = false;
         }
         if(!broadcast.toString().trim().equals("")){
             broadcast = "Watch on " + broadcast;
@@ -226,11 +226,11 @@ public class SportEventView extends View {
 
     private void updateGoing()
     {
-        if(number_going != 1) {
-            going = number_going + " Are Going";
+        if(numberGoing != 1) {
+            going = numberGoing + " Are Going";
         }
         else{
-            going = number_going + " Is Going";
+            going = numberGoing + " Is Going";
         }
         goingtextWidth = goingPaint.measureText(going, 0, going.length());
         goingLayout = new StaticLayout(going,goingPaint,(int)goingtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
@@ -240,11 +240,11 @@ public class SportEventView extends View {
 
     private void updateData()
     {
-        if(number_going != 1) {
-            going = number_going + " Are Going";
+        if(numberGoing != 1) {
+            going = numberGoing + " Are Going";
         }
         else{
-            going = number_going + " Is Going";
+            going = numberGoing + " Is Going";
         }
 
         CharSequence title = sport + " vs. " + opponent;
@@ -270,7 +270,7 @@ public class SportEventView extends View {
         width = MeasureSpec.getSize(widthMeasureSpec);
         int w = resolveSizeAndState(minw, widthMeasureSpec, 1);
         int h;
-        if(!getticket) {
+        if(!ticketAvail) {
             h = resolveSizeAndState(450, heightMeasureSpec, 0);
         }
         else{
@@ -289,7 +289,7 @@ public class SportEventView extends View {
         ticketPaint.setColor(ContextCompat.getColor(context,R.color.blue));
         canvas.drawRect(0,0,width,20,paint2);
         canvas.drawRect(0, 20, width, 450+offset, paint);
-        if(!getticket) {
+        if(!ticketAvail) {
             offset = 0;
         }
         else
@@ -305,7 +305,7 @@ public class SportEventView extends View {
         }
         canvas.drawRect(0,300+offset,width,302+offset,paint2);
         canvas.drawRect(width/2,302+offset,width/2+2,450+offset,paint2);
-        if(is_going) {
+        if(isGoing) {
             canvas.drawRect(width/2+1,302+offset,width,450+offset,paint3);
         }
         if (sportLayout != null) {
@@ -316,13 +316,13 @@ public class SportEventView extends View {
             canvas.restore();
         }
         canvas.drawRect(width*13/16,20,width,150,paint);
-        if(school_image != null){
-            canvas.drawBitmap(school_image,width-435, (height-150-offset)/4+10,png);
+        if(schoolImage != null){
+            canvas.drawBitmap(schoolImage,width-435, (height-150-offset)/4+10,png);
         }
-        if(sport_image != null) {
-            sport_image.setBounds(canvas.getWidth() - canvas.getHeight() + 200+offset,50,canvas.getWidth() - 30,(canvas.getHeight()-100) -80 -offset);
-            sport_image.setColorFilter(ContextCompat.getColor(context, R.color.lightgray), PorterDuff.Mode.SRC_IN);
-            sport_image.draw(canvas);
+        if(sportImage != null) {
+            sportImage.setBounds(canvas.getWidth() - canvas.getHeight() + 200+offset,50,canvas.getWidth() - 30,(canvas.getHeight()-100) -80 -offset);
+            sportImage.setColorFilter(ContextCompat.getColor(context, R.color.lightgray), PorterDuff.Mode.SRC_IN);
+            sportImage.draw(canvas);
         }
         if (locationLayout != null) {
             canvas.save();
@@ -400,8 +400,8 @@ public class SportEventView extends View {
                 }catch (Exception e){
                     System.out.println("File creation failed");
                 }
-                school_image = response;
-                school_image = Bitmap.createScaledBitmap(school_image,150,150,false);
+                schoolImage = response;
+                schoolImage = Bitmap.createScaledBitmap(schoolImage,150,150,false);
                 invalidate();
             }
         }
@@ -422,8 +422,8 @@ public class SportEventView extends View {
         }
         protected void onPostExecute(Bitmap response) {
             if(response != null) {
-                school_image = response;
-                school_image = Bitmap.createScaledBitmap(school_image,150,150,false);
+                schoolImage = response;
+                schoolImage = Bitmap.createScaledBitmap(schoolImage,150,150,false);
                 invalidate();
             }
             else{
@@ -491,7 +491,7 @@ public class SportEventView extends View {
         }
         protected void onPostExecute(Boolean response) {
             if(response) {
-                is_going = true;
+                isGoing = true;
                 youGoing = "Going!";
                 updateData();
                 invalidate();
@@ -512,16 +512,16 @@ public class SportEventView extends View {
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
             if(event.getX() >= width/2 && event.getY() >= (302 + offset)){
-                if(is_going) {
-                    number_going--;
-                    is_going = false;
+                if(isGoing) {
+                    numberGoing--;
+                    isGoing = false;
                     youGoing = "Going?";
                     sportEventAPI.MinusOneGoing(SportEventID, User);
                     new Toggle().execute(SportEventID);
                 }
                 else{
-                    number_going++;
-                    is_going = true;
+                    numberGoing++;
+                    isGoing = true;
                     youGoing = "Going!";
                     sportEventAPI.AddOneGoing(SportEventID,User);
                     new Toggle().execute(SportEventID);
