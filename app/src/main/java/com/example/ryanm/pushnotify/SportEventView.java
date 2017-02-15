@@ -461,7 +461,6 @@ public class SportEventView extends View {
 
     class CheckGoingFile extends AsyncTask<Integer, Void, Boolean> {
         protected Boolean doInBackground(Integer... location){
-            String filename = location[0].toString();
             int eventID = location[0];
             int userID = location[1];
             SportEventAttend attend = new SportEventAttend();
@@ -481,7 +480,6 @@ public class SportEventView extends View {
                 } finally {
                     urlConnection.disconnect();
                 }
-
                 String response = sb.toString();
                 response = DBInteraction.cleanJson(response);
                 Gson gson = new GsonBuilder().create();
@@ -489,15 +487,7 @@ public class SportEventView extends View {
             }catch(Exception e){
                 System.out.println("Error getting status");
             }
-
-            if(attend.Going)
-            {
-                return true;
-            }
-
-            File file = new File(context.getFilesDir() + filename);
-
-            return file.exists();
+            return attend.Going;
         }
         protected void onPostExecute(Boolean response) {
             if(response) {

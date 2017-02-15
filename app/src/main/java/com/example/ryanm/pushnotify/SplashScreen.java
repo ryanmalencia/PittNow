@@ -19,11 +19,13 @@ public class SplashScreen extends AppCompatActivity {
         System.out.println(file.getAbsoluteFile());
 
         if(!file.exists()) {
+            System.out.println("User not signed in");
             Intent intent = new Intent(this, SignIn.class);
             startActivity(intent);
             finish();
         }
         else {
+            System.out.println("User signed in");
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();

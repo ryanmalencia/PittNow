@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.ryanm.pushnotify.DataTypes.ConcertCollection;
 import com.example.ryanm.pushnotify.DataTypes.DeviceEnvironment;
 import com.example.ryanm.pushnotify.DataTypes.SportEventCollection;
 import com.google.gson.Gson;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
     private CustomScrollView scroll;
     private ProgressBar status;
     private int UserID;
+    private int SelectedIndex = 0;
     private DeviceEnvironment DevEnv;
     public static boolean finishedGet = true;
     private static int dataIndex = 0;
@@ -50,34 +52,63 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
         new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                finishedGet = true;
+                DevEnv = new DeviceEnvironment(getApplicationContext());
+                UserID = DevEnv.GetUserID();
+                final Integer [] array = new Integer[2];
+                array[0] = 0;
+                array[1] = UserID;
                 switch (item.getItemId()) {
                     case R.id.action_campus:
-
+                        dataIndex = 0;
+                        SelectedIndex = 2;
+                        break;
                     case R.id.action_concerts:
-
+                        dataIndex = 0;
+                        SelectedIndex = 1;
+                        new RetrieveConcertData().execute(array);
+                        break;
                     case R.id.action_sports:
-
+                        dataIndex = 0;
+                        SelectedIndex = 0;
+                        new RetrieveSportData().execute(array);
+                        break;
                     case R.id.action_clubs:
-
+                        dataIndex = 0;
+                        SelectedIndex = 3;
+                        break;
                     case R.id.action_other:
+                        dataIndex = 0;
+                        SelectedIndex = 4;
+                        break;
                 }
                 return true;
             }
         });
+
         DevEnv = new DeviceEnvironment(getApplicationContext());
         UserID = DevEnv.GetUserID();
-        System.out.println("Main User ID:" + UserID);
         final Integer [] array = new Integer[2];
         array[0] = 0;
         array[1] = UserID;
 
-        new RetrieveData().execute(array);
+        if(SelectedIndex == 0) {
+            new RetrieveSportData().execute(array);
+        }
+        else if(SelectedIndex == 1) {
+            new RetrieveConcertData().execute(array);
+        }
 
         swipe = (SwipeRefreshLayout)findViewById(R.id.activity_main_swipe_refresh_layout);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new RetrieveData().execute(array);
+                if(SelectedIndex == 0) {
+                    new RetrieveSportData().execute(array);
+                }
+                else if(SelectedIndex == 1) {
+                    new RetrieveConcertData().execute(array);
+                }
                 dataIndex = 0;
             }
         });
@@ -91,11 +122,20 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
     public void onScrollBottomedOut()
     {
         if(finishedGet) {
-            Integer [] array = new Integer[2];
-            array[0] = dataIndex;
-            array[1] = UserID;
-            finishedGet = false;
-            new RetrieveData().execute(array);
+            if(SelectedIndex == 0) {
+                Integer[] array = new Integer[2];
+                array[0] = dataIndex;
+                array[1] = UserID;
+                finishedGet = false;
+                new RetrieveSportData().execute(array);
+            }
+            else if(SelectedIndex == 1) {
+                Integer[] array = new Integer[2];
+                array[0] = dataIndex;
+                array[1] = UserID;
+                finishedGet = false;
+                new RetrieveConcertData().execute(array);
+            }
         }
     }
 
@@ -103,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
      * Get SportEvent Data (closest 10 to today's date)
      *
      */
-    class RetrieveData extends AsyncTask<Integer, Void, String> {
+    class RetrieveSportData extends AsyncTask<Integer, Void, String> {
         int index = 0;
         int User = 0;
         protected void onPreExecute() {
@@ -158,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
                 SportEventCollection Events;
                 Events = gson.fromJson(response, SportEventCollection.class);
-                if(Events.Events.length >0)
+                if(Events.Events.length > 0)
                 {
                     dataIndex++;
                 }
@@ -167,6 +207,77 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                     SportEventView temp = new SportEventView(getApplicationContext());
                     temp.setIsHome(true);
                     temp.setEvent(Events.Events[i],User);
+                    layout.addView(temp,layout.getChildCount()-1);
+                }
+            }
+            finishedGet = true;
+            swipe.setRefreshing(false);
+            status.setVisibility(View.GONE);
+        }
+    }
+
+    class RetrieveConcertData extends AsyncTask<Integer, Void, String> {
+        int index = 0;
+        int User = 0;
+        protected void onPreExecute() {
+            status.setVisibility(View.VISIBLE);
+        }
+
+        protected String doInBackground(Integer... position){
+            index = position[0];
+            User = position[1];
+            try {
+                URL url = new URL(DBInteraction.api_url + "api/concert/getfutureconcerts/" + index);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+                try{
+                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while((line = br.readLine()) != null)
+                    {
+                        sb.append(line);
+                    }
+                    br.close();
+                    return sb.toString();
+                }
+                finally{
+                    urlConnection.disconnect();
+                }
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+                return null;
+            }
+        }
+
+        protected void onPostExecute(String response) {
+            System.out.println(index);
+            LinearLayout layout= (LinearLayout)findViewById(R.id.sport_events);
+            if(index == 0) {
+                layout.removeViews(0,layout.getChildCount()-1);
+            }
+
+            if(response == null) {
+                TextView view = new TextView(getApplicationContext());
+                view.setText("Error getting data");
+                layout.removeViews(0,layout.getChildCount()-1);
+                layout.addView(view);
+            }
+            else {
+                response = DBInteraction.cleanJson(response);
+                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+                ConcertCollection Concerts;
+                Concerts = gson.fromJson(response, ConcertCollection.class);
+                if(Concerts.Concerts.length > 0)
+                {
+                    dataIndex++;
+                }
+                for(int i = 0; i < Concerts.Concerts.length ; i++)
+                {
+                    ConcertView temp = new ConcertView(getApplicationContext());
                     layout.addView(temp,layout.getChildCount()-1);
                 }
             }

@@ -30,10 +30,10 @@ public class DeviceEnvironment {
                     InputStreamReader isr = new InputStreamReader(fis);
                     BufferedReader buffreader = new BufferedReader(isr);
                     String line = buffreader.readLine();
-                    System.out.println("User id: " + line);
                     ID = Integer.parseInt(line);
                     return ID;
                 }catch (IOException e){
+                    System.out.println("Error reading user file");
                 }
             }
         }
