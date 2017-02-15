@@ -1,21 +1,28 @@
 package com.example.ryanm.pushnotify;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
+import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.ryanm.pushnotify.ApiCalls.ConcertAPI;
 import com.example.ryanm.pushnotify.DataTypes.Concert;
 
 import java.util.Date;
 
-public class ConcertView extends View {
+public class ConcertView extends View{
     public int ConcertID;
+    private ConcertAPI concertAPI;
     private int User = 0;
     private int numberGoing;
     private int offset;
@@ -34,10 +41,12 @@ public class ConcertView extends View {
     private StaticLayout yougoingLayout;
     private StaticLayout datetimeLayout;
     private StaticLayout ticketLayout;
+    private GestureDetector mDetector;
     Date date;
     String imageLoc;
     String ticketLink;
     private CharSequence venue;
+    private CharSequence youGoing;
     private Context context;
     private TextPaint tickettextPaint;
 
@@ -59,6 +68,8 @@ public class ConcertView extends View {
         tickettextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         tickettextPaint.setTextSize(65);
         tickettextPaint.setColor(Color.BLACK);
+        //mDetector = new GestureDetector(context,new mListener());
+        concertAPI = new ConcertAPI();
         /*
         mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize(50);
@@ -113,4 +124,57 @@ public class ConcertView extends View {
             canvas.drawRect(width/2+1,302+offset,width,450+offset,paint3);
         }
     }
+/*
+    private void updateGoing()
+    {
+        if(numberGoing != 1) {
+            going = numberGoing + " Are Going";
+        }
+        else{
+            going = numberGoing + " Is Going";
+        }
+        goingtextWidth = goingPaint.measureText(going, 0, going.length());
+        goingLayout = new StaticLayout(going,goingPaint,(int)goingtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+        yougoingtextWidth = yougoingPaint.measureText(youGoing, 0, youGoing.length());
+        yougoingLayout = new StaticLayout(youGoing,yougoingPaint,(int)yougoingtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return mDetector.onTouchEvent(event);
+    }
+
+    class mListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+        @Override
+        public boolean onSingleTapUp(MotionEvent event) {
+            if(event.getX() >= width/2 && event.getY() >= (302 + offset)){
+                if(isGoing) {
+                    numberGoing--;
+                    isGoing = false;
+                    youGoing = "Going?";
+                    sportEventAPI.MinusOneGoing(SportEventID, User);
+                    new SportEventView.Toggle().execute(SportEventID);
+                }
+                else{
+                    numberGoing++;
+                    isGoing = true;
+                    youGoing = "Going!";
+                    sportEventAPI.AddOneGoing(SportEventID,User);
+                    new SportEventView.Toggle().execute(SportEventID);
+                }
+                updateGoing();
+                invalidate();
+            }
+            else if(event.getY() >= (302) && event.getY() < (450)){
+                Uri uri = Uri.parse(ticketLink);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                context.startActivity(intent);
+            }
+            return true;
+        }
+    }*/
 }

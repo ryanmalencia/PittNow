@@ -36,7 +36,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class SportEventView extends View {
+public class SportEventView extends View{
     public int SportEventID;
     private boolean home = true;
     private boolean isGoing = false;
@@ -530,9 +530,11 @@ public class SportEventView extends View {
                 invalidate();
             }
             else if(event.getY() >= (302) && event.getY() < (450)){
-                Uri uri = Uri.parse(ticketlink);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                context.startActivity(intent);
+                if(ticketlink != null && offset != 0) {
+                    Uri uri = Uri.parse(ticketlink);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    context.startActivity(intent);
+                }
             }
             return true;
         }
