@@ -108,16 +108,14 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
                 StringBuilder sb = new StringBuilder();
-                try{
+                try {
                     BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     String line;
-                    while((line = br.readLine()) != null)
-                    {
+                    while ((line = br.readLine()) != null) {
                         sb.append(line);
                     }
                     br.close();
-                }
-                finally{
+                } finally {
                     urlConnection.disconnect();
                 }
 
@@ -126,12 +124,14 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
                 Gson gson = new GsonBuilder().create();
                 User user = gson.fromJson(response, User.class);
 
-                while(user.UserID == 0) {
+
+                if(user.UserID == 0) {
                     user = new User(the_user);
                     UserAPI userAPI = new UserAPI();
                     userAPI.Add(user);
+                }
 
-
+                while(user.UserID == 0) {
                     urlConnection.connect();
                     sb = new StringBuilder();
                     try{
