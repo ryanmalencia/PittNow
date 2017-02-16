@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(bottom_navigation);
 
+        scroll = (CustomScrollView) findViewById(R.id.myscroll);
+        scroll.setScrollViewListener(this);
+
         //Do Stuff based on a change of selected item in Bottom Nav View
         bottomNavigationView.setOnNavigationItemSelectedListener(
         new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,24 +65,29 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                     case R.id.action_campus:
                         dataIndex = 0;
                         SelectedIndex = 2;
+                        scroll.smoothScrollTo(0,0);
                         break;
                     case R.id.action_concerts:
                         dataIndex = 0;
                         SelectedIndex = 1;
+                        scroll.smoothScrollTo(0,0);
                         new RetrieveConcertData().execute(array);
                         break;
                     case R.id.action_sports:
                         dataIndex = 0;
                         SelectedIndex = 0;
+                        scroll.smoothScrollTo(0,0);
                         new RetrieveSportData().execute(array);
                         break;
                     case R.id.action_clubs:
                         dataIndex = 0;
                         SelectedIndex = 3;
+                        scroll.smoothScrollTo(0,0);
                         break;
                     case R.id.action_other:
                         dataIndex = 0;
                         SelectedIndex = 4;
+                        scroll.smoothScrollTo(0,0);
                         break;
                 }
                 return true;
@@ -112,10 +120,6 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 dataIndex = 0;
             }
         });
-
-        scroll = (CustomScrollView) findViewById(R.id.myscroll);
-        scroll.setScrollViewListener(this);
-
     }
 
     @Override
