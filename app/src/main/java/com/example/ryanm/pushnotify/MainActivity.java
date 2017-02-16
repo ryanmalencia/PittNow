@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
         new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 finishedGet = true;
                 DevEnv = new DeviceEnvironment(getApplicationContext());
                 UserID = DevEnv.GetUserID();
@@ -65,29 +66,24 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                     case R.id.action_campus:
                         dataIndex = 0;
                         SelectedIndex = 2;
-                        scroll.smoothScrollTo(0,0);
                         break;
                     case R.id.action_concerts:
                         dataIndex = 0;
                         SelectedIndex = 1;
-                        scroll.smoothScrollTo(0,0);
                         new RetrieveConcertData().execute(array);
                         break;
                     case R.id.action_sports:
                         dataIndex = 0;
                         SelectedIndex = 0;
-                        scroll.smoothScrollTo(0,0);
                         new RetrieveSportData().execute(array);
                         break;
                     case R.id.action_clubs:
                         dataIndex = 0;
                         SelectedIndex = 3;
-                        scroll.smoothScrollTo(0,0);
                         break;
                     case R.id.action_other:
                         dataIndex = 0;
                         SelectedIndex = 4;
-                        scroll.smoothScrollTo(0,0);
                         break;
                 }
                 return true;
@@ -211,6 +207,11 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 }
             }
             finishedGet = true;
+            if(index == 0){
+                //scroll.smoothScrollTo(0,0);
+                scroll.fullScroll(ScrollView.FOCUS_UP);
+                scroll.fullScroll(ScrollView.FOCUS_UP);
+            }
             swipe.setRefreshing(false);
             status.setVisibility(View.GONE);
         }
@@ -280,6 +281,11 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
             }
             finishedGet = true;
             swipe.setRefreshing(false);
+            if(index == 0){
+                //scroll.smoothScrollTo(0,0);
+                scroll.fullScroll(ScrollView.FOCUS_UP);
+                scroll.fullScroll(ScrollView.FOCUS_UP);
+            }
             status.setVisibility(View.GONE);
         }
     }
