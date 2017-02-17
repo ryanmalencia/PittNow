@@ -432,11 +432,11 @@ public class SportEventView extends View{
         }
     }
 
-    class Toggle extends AsyncTask<Integer, Void, Void> {
+    class Toggle extends AsyncTask<String, Void, Void> {
         protected void onPreExecute() {
         }
-        protected Void doInBackground(Integer... location){
-            String filename = location[0].toString();
+        protected Void doInBackground(String... location){
+            String filename = location[0];
             File file = new File(context.getFilesDir() + filename);
 
             if(file.exists()) {
@@ -517,14 +517,14 @@ public class SportEventView extends View{
                     isGoing = false;
                     youGoing = "Going?";
                     sportEventAPI.MinusOneGoing(SportEventID, User);
-                    new Toggle().execute(SportEventID);
+                    new Toggle().execute(SportEventID + ".sport");
                 }
                 else{
                     numberGoing++;
                     isGoing = true;
                     youGoing = "Going!";
                     sportEventAPI.AddOneGoing(SportEventID,User);
-                    new Toggle().execute(SportEventID);
+                    new Toggle().execute(SportEventID + ".sport");
                 }
                 updateGoing();
                 invalidate();

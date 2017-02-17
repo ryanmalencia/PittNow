@@ -1,6 +1,7 @@
 package com.example.ryanm.pushnotify;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,21 +9,31 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.ryanm.pushnotify.ApiCalls.ConcertAPI;
 import com.example.ryanm.pushnotify.DataTypes.Concert;
+import com.example.ryanm.pushnotify.DataTypes.ConcertAttend;
+import com.example.ryanm.pushnotify.DataTypes.SportEventAttend;
+import com.google.android.gms.fitness.data.DataType;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
@@ -88,6 +99,7 @@ public class ConcertView extends View{
         band = concert.Band;
         venue = concert.Venue;
         date = concert.Date;
+        numberGoing = concert.Going;
         dateTime = DateFormat.getDateInstance().format(date) + ", ";
         dateTime = dateTime.toString() + (date.getHours() % 12) + ":00";
         if(date.getHours() >= 12){
@@ -100,9 +112,13 @@ public class ConcertView extends View{
         this.User = User;
         tickets = "Get Tickets";
         imageLoc = concert.ImageLink;
+        ConcertID = concert.ConcertID;
         File image_file = new File(context.getCacheDir(),band.toString().trim().toLowerCase());
             new RetrieveData().execute(imageLoc);
-
+        final Integer[] array = new Integer[2];
+        array[0] = ConcertID;
+        array[1] = User;
+        new CheckGoingFile().execute(array);
         updateData();
         invalidate();
     }
@@ -124,6 +140,7 @@ public class ConcertView extends View{
         yougoingPaint.setTextSize(50);
         timePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         timePaint.setTextSize(45);
+        mDetector = new GestureDetector(context,new mListener());
     }
 
     @Override
@@ -208,7 +225,7 @@ public class ConcertView extends View{
         canvas.drawRect(0,400+offset,width,402+offset,paint2);
         canvas.drawRect(width/2,402+offset,width/2+2,550+offset,paint2);
         if(isGoing) {
-            canvas.drawRect(width/2+1,402+offset,width,500+offset,paint3);
+            canvas.drawRect(width/2+1,402+offset,width,550+offset,paint3);
         }
         if (bandLayout != null) {
 
@@ -269,7 +286,6 @@ public class ConcertView extends View{
                 return bm;
             }
             catch (Exception e){
-                System.out.println(e.getMessage());
                 return null;
             }
         }
@@ -277,7 +293,6 @@ public class ConcertView extends View{
             if(response != null) {
                 try{
                     String fileName = band.toString();
-                    System.out.println(band.toString());
                     File temp = new File(context.getCacheDir(),fileName.trim().toLowerCase());
                     boolean created = temp.createNewFile();
                     if(created) {
@@ -293,7 +308,6 @@ public class ConcertView extends View{
                         outputStream.close();
                     }
                 }catch (Exception e){
-                    System.out.println(e.getMessage());
                     System.out.println("File creation failed");
                 }
                 bandImage = response;
@@ -302,46 +316,72 @@ public class ConcertView extends View{
             }
         }
     }
-/*
-    class ReadBitmapFile extends AsyncTask<String, Void, Bitmap> {
-        protected void onPreExecute() {
-        }
-        protected Bitmap doInBackground(String... location){
-            Bitmap bm;
+    class CheckGoingFile extends AsyncTask<Integer, Void, Boolean> {
+        protected Boolean doInBackground(Integer... location){
+            int eventID = location[0];
+            int userID = location[1];
+            ConcertAttend attend = new ConcertAttend();
             try {
-                bm = BitmapFactory.decodeFile(location[0]);
-                return bm;
+                URL url = new URL(DBInteraction.api_url + "api/concert/getattendstatus/" + eventID + "/" + userID);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+                StringBuilder sb = new StringBuilder();
+                try {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    br.close();
+                } finally {
+                    urlConnection.disconnect();
+                }
+                String response = sb.toString();
+                response = DBInteraction.cleanJson(response);
+                Gson gson = new GsonBuilder().create();
+                attend = gson.fromJson(response, ConcertAttend.class);
+            }catch(Exception e){
+                System.out.println("Error getting status");
             }
-            catch (Exception e){
-                return null;
-            }
+            return attend.Going;
         }
-        protected void onPostExecute(Bitmap response) {
-            if(response != null) {
-                bandImage = response;
-                bandImage = Bitmap.createScaledBitmap(bandImage,150,150,false);
+        protected void onPostExecute(Boolean response) {
+            if(response) {
+                isGoing = true;
+                youGoing = "Going!";
+                updateData();
                 invalidate();
             }
-            else{
-                System.out.println("Unable to read file");
+        }
+    }
+
+    class Toggle extends AsyncTask<String, Void, Void> {
+        protected void onPreExecute() {
+        }
+    protected Void doInBackground(String... location){
+        String filename = location[0];
+        File file = new File(context.getFilesDir() + filename);
+
+        if(file.exists()) {
+            Boolean success = file.delete();
+            if(success) {
+                System.out.println("Deleted file");
             }
         }
-    }
-
-
-    private void updateGoing()
-    {
-        if(numberGoing != 1) {
-            going = numberGoing + " Are Going";
+        else {
+            try {
+                Boolean success = file.createNewFile();
+                if(!success) {
+                    System.out.println("Failed to create file");
+                }
+            }catch (IOException e){
+                System.out.println("Failed to create file");
+            }
         }
-        else{
-            going = numberGoing + " Is Going";
-        }
-        goingtextWidth = goingPaint.measureText(going, 0, going.length());
-        goingLayout = new StaticLayout(going,goingPaint,(int)goingtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
-        yougoingtextWidth = yougoingPaint.measureText(youGoing, 0, youGoing.length());
-        yougoingLayout = new StaticLayout(youGoing,yougoingPaint,(int)yougoingtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+        return null;
     }
+}
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -355,30 +395,32 @@ public class ConcertView extends View{
         }
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
-            if(event.getX() >= width/2 && event.getY() >= (302 + offset)){
+            if(event.getX() >= width/2 && event.getY() >= (402 + offset)){
                 if(isGoing) {
                     numberGoing--;
                     isGoing = false;
                     youGoing = "Going?";
-                    sportEventAPI.MinusOneGoing(SportEventID, User);
-                    new SportEventView.Toggle().execute(SportEventID);
+                    concertAPI.MinusOneGoing(ConcertID, User);
+                    new Toggle().execute(ConcertID + ".concert");
                 }
                 else{
                     numberGoing++;
                     isGoing = true;
                     youGoing = "Going!";
-                    sportEventAPI.AddOneGoing(SportEventID,User);
-                    new SportEventView.Toggle().execute(SportEventID);
+                    concertAPI.AddOneGoing(ConcertID,User);
+                    new Toggle().execute(ConcertID + ".concert");
                 }
                 updateGoing();
                 invalidate();
             }
             else if(event.getY() >= (302) && event.getY() < (450)){
-                Uri uri = Uri.parse(ticketLink);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                context.startActivity(intent);
+                if(ticketLink != null && offset != 0) {
+                    Uri uri = Uri.parse(ticketLink);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    context.startActivity(intent);
+                }
             }
             return true;
         }
-    }*/
+    }
 }
