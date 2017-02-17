@@ -59,13 +59,13 @@ public class SportEventView extends View{
     private StaticLayout sportLayout;
     private StaticLayout goingLayout;
     private StaticLayout yougoingLayout;
-    private StaticLayout scoretimeLayout;
+    private StaticLayout timeLayout;
     private StaticLayout locationLayout;
     private StaticLayout broadcastLayout;
     private StaticLayout ticketLayout;
     private TextPaint mTextPaint;
     private TextPaint tickettextPaint;
-    private TextPaint scoretimePaint;
+    private TextPaint timePaint;
     private TextPaint locationPaint;
     private TextPaint goingPaint;
     private TextPaint yougoingPaint;
@@ -99,8 +99,8 @@ public class SportEventView extends View{
         tickettextPaint.setColor(Color.BLACK);
         mTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize(50);
-        scoretimePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        scoretimePaint.setTextSize(45);
+        timePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        timePaint.setTextSize(45);
         locationPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         locationPaint.setTextSize(45);
         goingPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -250,8 +250,8 @@ public class SportEventView extends View{
         CharSequence title = sport + " vs. " + opponent;
         titletextWidth = mTextPaint.measureText(title, 0, title.length());
         sportLayout = new StaticLayout(title, mTextPaint, (int)titletextWidth, Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
-        textWidth = scoretimePaint.measureText(scoretime, 0, scoretime.length());
-        scoretimeLayout = new StaticLayout(scoretime,scoretimePaint,(int)textWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+        textWidth = timePaint.measureText(scoretime, 0, scoretime.length());
+        timeLayout = new StaticLayout(scoretime,timePaint,(int)textWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
         textWidth = locationPaint.measureText(location, 0, location.length());
         locationLayout = new StaticLayout(location,locationPaint,(int)textWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
         goingtextWidth = goingPaint.measureText(going, 0, going.length());
@@ -330,10 +330,10 @@ public class SportEventView extends View{
             locationLayout.draw(canvas);
             canvas.restore();
         }
-        if (scoretimeLayout != null) {
+        if (timeLayout != null) {
             canvas.save();
             canvas.translate(20,145);
-            scoretimeLayout.draw(canvas);
+            timeLayout.draw(canvas);
             canvas.restore();
         }
         if (broadcastLayout != null) {
