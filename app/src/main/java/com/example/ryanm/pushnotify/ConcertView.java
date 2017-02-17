@@ -114,7 +114,13 @@ public class ConcertView extends View{
         imageLoc = concert.ImageLink;
         ConcertID = concert.ConcertID;
         File image_file = new File(context.getCacheDir(),band.toString().trim().toLowerCase());
+        if(!image_file.exists()) {
             new RetrieveData().execute(imageLoc);
+        }
+        else{
+            new ReadBitmapFile().execute(image_file.getAbsolutePath());
+        }
+
         final Integer[] array = new Integer[2];
         array[0] = ConcertID;
         array[1] = User;
@@ -359,29 +365,54 @@ public class ConcertView extends View{
     class Toggle extends AsyncTask<String, Void, Void> {
         protected void onPreExecute() {
         }
-    protected Void doInBackground(String... location){
-        String filename = location[0];
-        File file = new File(context.getFilesDir() + filename);
 
-        if(file.exists()) {
-            Boolean success = file.delete();
-            if(success) {
-                System.out.println("Deleted file");
-            }
-        }
-        else {
-            try {
-                Boolean success = file.createNewFile();
-                if(!success) {
+        protected Void doInBackground(String... location) {
+            String filename = location[0];
+            File file = new File(context.getFilesDir() + filename);
+
+            if (file.exists()) {
+                Boolean success = file.delete();
+                if (success) {
+                    System.out.println("Deleted file");
+                }
+            } else {
+                try {
+                    Boolean success = file.createNewFile();
+                    if (!success) {
+                        System.out.println("Failed to create file");
+                    }
+                } catch (IOException e) {
                     System.out.println("Failed to create file");
                 }
-            }catch (IOException e){
-                System.out.println("Failed to create file");
+            }
+            return null;
+        }
+    }
+    class ReadBitmapFile extends AsyncTask<String, Void, Bitmap> {
+        protected void onPreExecute() {
+        }
+        protected Bitmap doInBackground(String... location){
+            Bitmap bm;
+            try {
+                bm = BitmapFactory.decodeFile(location[0]);
+                return bm;
+            }
+            catch (Exception e){
+                return null;
             }
         }
-        return null;
+        protected void onPostExecute(Bitmap response) {
+            if(response != null) {
+                bandImage = response;
+                bandImage = Bitmap.createScaledBitmap(bandImage,380,380,false);
+                invalidate();
+            }
+            else{
+                System.out.println("Unable to read file");
+            }
+        }
     }
-}
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
