@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
 import java.util.Date;
 
 public class ConcertView extends View{
@@ -44,6 +45,7 @@ public class ConcertView extends View{
     private CharSequence tickets;
     private CharSequence venue;
     private CharSequence youGoing;
+    private CharSequence dateTime;
     private Bitmap bandImage;
     private float goingtextWidth;
     private float bandtextWidth;
@@ -66,6 +68,7 @@ public class ConcertView extends View{
     private TextPaint goingPaint;
     private TextPaint venuePaint;
     private TextPaint bandPaint;
+    private TextPaint timePaint;
     private TextPaint homePaint;
     private GestureDetector mDetector;
     Date date;
@@ -85,6 +88,14 @@ public class ConcertView extends View{
         band = concert.Band;
         venue = concert.Venue;
         date = concert.Date;
+        dateTime = DateFormat.getDateInstance().format(date) + ", ";
+        dateTime = dateTime.toString() + (date.getHours() % 12) + ":00";
+        if(date.getHours() >= 12){
+            dateTime = dateTime + " PM";
+        }
+        else{
+            dateTime = dateTime + " AM";
+        }
         youGoing = "Going?";
         this.User = User;
         tickets = "Get Tickets";
@@ -111,7 +122,8 @@ public class ConcertView extends View{
         goingPaint.setTextSize(50);
         yougoingPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         yougoingPaint.setTextSize(50);
-
+        timePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        timePaint.setTextSize(45);
     }
 
     @Override
@@ -167,6 +179,8 @@ public class ConcertView extends View{
         yougoingLayout = new StaticLayout(youGoing,yougoingPaint,(int)yougoingtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
         ticketTextWidth = tickettextPaint.measureText(tickets, 0, tickets.length());
         bandLayout =  new StaticLayout(band,bandPaint,(int)bandtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+        textWidth = timePaint.measureText(dateTime, 0, dateTime.length());
+        timeLayout = new StaticLayout(dateTime,timePaint,(int)textWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
     }
 
     protected void onDraw(Canvas canvas){
@@ -208,13 +222,13 @@ public class ConcertView extends View{
         }
         if (venueLayout != null) {
             canvas.save();
-            canvas.translate(20,105);
+            canvas.translate(20,95);
             venueLayout.draw(canvas);
             canvas.restore();
         }
         if (timeLayout != null) {
             canvas.save();
-            canvas.translate(20,145);
+            canvas.translate(20,155);
             timeLayout.draw(canvas);
             canvas.restore();
         }
