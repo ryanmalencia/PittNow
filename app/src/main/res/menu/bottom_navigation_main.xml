@@ -20,12 +20,6 @@
         android:title="@string/campus"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_clubs"
-        android:enabled="true"
-        android:icon="@drawable/ic_clubs"
-        android:title="@string/clubs"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/action_other"
         android:enabled="true"
         android:icon="@drawable/ic_other"

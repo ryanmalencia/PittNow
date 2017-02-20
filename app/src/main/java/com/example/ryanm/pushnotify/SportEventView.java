@@ -130,6 +130,10 @@ public class SportEventView extends View{
         imageLoc = Event.ImageLoc;
         home = Event.Home;
         date = Event.Date;
+        if(Event.UserGoing){
+            isGoing = true;
+            youGoing = "Going!";
+        }
         numberGoing = Event.Going;
 
         switch(sport.toString()){
@@ -216,10 +220,6 @@ public class SportEventView extends View{
         }
         dateString = DateFormat.getDateInstance().format(date) + ", ";
         scoretime = dateString.toString() + scoretime.toString();
-        final Integer[] array = new Integer[2];
-        array[0] = SportEventID;
-        array[1] = User;
-        new CheckGoingFile().execute(array);
         updateData();
         invalidate();
     }
@@ -456,46 +456,6 @@ public class SportEventView extends View{
                 }
             }
             return null;
-        }
-    }
-
-    class CheckGoingFile extends AsyncTask<Integer, Void, Boolean> {
-        protected Boolean doInBackground(Integer... location){
-            int eventID = location[0];
-            int userID = location[1];
-            SportEventAttend attend = new SportEventAttend();
-            try {
-                URL url = new URL(DBInteraction.api_url + "api/sportevent/getattendstatus/" + eventID + "/" + userID);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
-                StringBuilder sb = new StringBuilder();
-                try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    br.close();
-                } finally {
-                    urlConnection.disconnect();
-                }
-                String response = sb.toString();
-                response = DBInteraction.cleanJson(response);
-                Gson gson = new GsonBuilder().create();
-                attend = gson.fromJson(response, SportEventAttend.class);
-            }catch(Exception e){
-                System.out.println("Error getting status");
-            }
-            return attend.Going;
-        }
-        protected void onPostExecute(Boolean response) {
-            if(response) {
-                isGoing = true;
-                youGoing = "Going!";
-                updateData();
-                invalidate();
-            }
         }
     }
 

@@ -6,11 +6,11 @@ public class SportLinks {
     }
 
     public String WomensBasketball() {
-        return "https://ev12.evenue.net/cgi-bin/ncommerce3/SEGetGroupList?groupCode=WBB&linkID=pitt&shopperContext=&caller=&appCode=";
+        return "https://ev12.evenue.net/cgi-bin/ncommerce3/SEGetEventList?groupCode=WBS&linkID=pitt&shopperContext=&caller=&appCode=";
     }
 
     public String MensBasketball(){
-        return "https://ev12.evenue.net/cgi-bin/ncommerce3/SEGetGroupList?groupCode=MBS&linkID=pitt&shopperContext=&caller=&appCode=";
+        return "https://ev12.evenue.net/cgi-bin/ncommerce3/SEGetEventList?groupCode=MBSG&linkID=pitt&shopperContext=&caller=&appCode=";
     }
 
     public String Football(){

@@ -77,13 +77,9 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                         SelectedIndex = 0;
                         new RetrieveSportData().execute(array);
                         break;
-                    case R.id.action_clubs:
-                        dataIndex = 0;
-                        SelectedIndex = 3;
-                        break;
                     case R.id.action_other:
                         dataIndex = 0;
-                        SelectedIndex = 4;
+                        SelectedIndex = 3;
                         break;
                 }
                 return true;
@@ -154,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
             index = position[0];
             User = position[1];
             try {
-                URL url = new URL(DBInteraction.api_url + "api/sportevent/getfutureevents/" + index);
+                URL url = new URL(DBInteraction.api_url + "api/sportevent/getfutureuserevents/" + User + "/" + index);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -208,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
             }
             finishedGet = true;
             if(index == 0){
-                //scroll.smoothScrollTo(0,0);
                 scroll.fullScroll(ScrollView.FOCUS_UP);
                 scroll.fullScroll(ScrollView.FOCUS_UP);
             }
@@ -228,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
             index = position[0];
             User = position[1];
             try {
-                URL url = new URL(DBInteraction.api_url + "api/concert/getfutureconcerts/" + index);
+                URL url = new URL(DBInteraction.api_url + "api/concert/getfutureuserconcerts/" + User + "/" + index);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -282,7 +277,6 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
             finishedGet = true;
             swipe.setRefreshing(false);
             if(index == 0){
-                //scroll.smoothScrollTo(0,0);
                 scroll.fullScroll(ScrollView.FOCUS_UP);
                 scroll.fullScroll(ScrollView.FOCUS_UP);
             }

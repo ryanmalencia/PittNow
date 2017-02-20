@@ -14,7 +14,7 @@ public class SportEvent {
     public Date Date;
     public Boolean Home;
     public int Going;
-
+    public Boolean UserGoing;
     public Sport Sport;
 
     /**

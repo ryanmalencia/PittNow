@@ -9,6 +9,7 @@ public class Concert {
     public String ImageLink;
     public String TicketLink;
     public Date Date;
+    public Boolean UserGoing;
     public int Going;
 
     public Concert(){

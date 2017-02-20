@@ -7,8 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
@@ -18,22 +16,13 @@ import android.text.TextPaint;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.example.ryanm.pushnotify.ApiCalls.ConcertAPI;
 import com.example.ryanm.pushnotify.DataTypes.Concert;
-import com.example.ryanm.pushnotify.DataTypes.ConcertAttend;
-import com.example.ryanm.pushnotify.DataTypes.SportEventAttend;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
@@ -50,8 +39,6 @@ public class ConcertView extends View{
     private boolean ticketAvail = false;
     private boolean isGoing;
     private CharSequence band;
-    private CharSequence venueLocation;
-    private CharSequence ticketLocation;
     private CharSequence going;
     private CharSequence tickets;
     private CharSequence venue;
@@ -59,16 +46,15 @@ public class ConcertView extends View{
     private CharSequence dateTime;
     private Bitmap bandImage;
     private float goingtextWidth;
-    private float bandtextWidth;
+    float bandtextWidth;
     private float ticketTextWidth;
     private float yougoingtextWidth;
-    private float venueWidth;
-    private float textWidth;
+    float venueWidth;
+    float textWidth;
     private Paint paint= new Paint();
     private Paint paint2= new Paint();
     private Paint paint3= new Paint();
     private Paint ticketPaint = new Paint();
-    private Paint png = new Paint(Paint.ANTI_ALIAS_FLAG);
     private StaticLayout bandLayout;
     private StaticLayout goingLayout;
     private StaticLayout venueLayout;
@@ -80,7 +66,6 @@ public class ConcertView extends View{
     private TextPaint venuePaint;
     private TextPaint bandPaint;
     private TextPaint timePaint;
-    private TextPaint homePaint;
     private GestureDetector mDetector;
     Date date;
     String imageLoc;
@@ -101,14 +86,31 @@ public class ConcertView extends View{
         date = concert.Date;
         numberGoing = concert.Going;
         dateTime = DateFormat.getDateInstance().format(date) + ", ";
-        dateTime = dateTime.toString() + (date.getHours() % 12) + ":00";
+        if(date.getHours() != 12) {
+            dateTime = dateTime.toString() + (date.getHours() % 12) + ":00";
+        }
+        else{
+            dateTime = dateTime.toString() + date.getHours() + ":00";
+        }
+        youGoing = "Going?";
+
+        if(concert.TicketLink.trim().length() > 0){
+            ticketLink = concert.TicketLink;
+            ticketAvail = true;
+        }
+
+        if(concert.UserGoing){
+            isGoing = true;
+            youGoing = "Going!";
+        }
+
         if(date.getHours() >= 12){
             dateTime = dateTime + " PM";
         }
         else{
             dateTime = dateTime + " AM";
         }
-        youGoing = "Going?";
+
         this.User = User;
         tickets = "Get Tickets";
         imageLoc = concert.ImageLink;
@@ -120,21 +122,14 @@ public class ConcertView extends View{
         else{
             new ReadBitmapFile().execute(image_file.getAbsolutePath());
         }
-
-        final Integer[] array = new Integer[2];
-        array[0] = ConcertID;
-        array[1] = User;
-        new CheckGoingFile().execute(array);
         updateData();
         invalidate();
     }
 
     private void init(){
-
         tickettextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         tickettextPaint.setTextSize(55);
         tickettextPaint.setColor(Color.BLACK);
-        //mDetector = new GestureDetector(context,new mListener());
         concertAPI = new ConcertAPI();
         bandPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         bandPaint.setTextSize(55);
@@ -162,7 +157,6 @@ public class ConcertView extends View{
         else{
             h = resolveSizeAndState(700, heightMeasureSpec, 0);
         }
-
         height = h;
         setMeasuredDimension(w, h);
     }
@@ -204,6 +198,8 @@ public class ConcertView extends View{
         bandLayout =  new StaticLayout(band,bandPaint,(int)bandtextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
         textWidth = timePaint.measureText(dateTime, 0, dateTime.length());
         timeLayout = new StaticLayout(dateTime,timePaint,(int)textWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
+        ticketTextWidth = tickettextPaint.measureText(tickets, 0, tickets.length());
+        ticketLayout = new StaticLayout(tickets,tickettextPaint,(int)ticketTextWidth,Layout.Alignment.ALIGN_CENTER, 1f, 0f, true);
     }
 
     protected void onDraw(Canvas canvas){
@@ -217,13 +213,12 @@ public class ConcertView extends View{
         if(!ticketAvail) {
             offset = 0;
         }
-        else
-        {
+        else {
             offset = 150;
-            canvas.drawRect(0,350,width,352,paint2);
+            canvas.drawRect(0,400,width,402,paint2);
             if(ticketLayout != null){
                 canvas.save();
-                canvas.translate(((width)-(int)ticketTextWidth)/2, 375-45);
+                canvas.translate(((width)-(int)ticketTextWidth)/2, 430);
                 ticketLayout.draw(canvas);
                 canvas.restore();
             }
@@ -241,7 +236,7 @@ public class ConcertView extends View{
             canvas.restore();
         }
         if(bandImage != null){
-            canvas.drawBitmap(bandImage,width - height + 150 - offset+20,20,paint);
+            canvas.drawBitmap(bandImage,width - height + 150 + offset +20,20,paint);
         }
         if (venueLayout != null) {
             canvas.save();
@@ -322,46 +317,6 @@ public class ConcertView extends View{
             }
         }
     }
-    class CheckGoingFile extends AsyncTask<Integer, Void, Boolean> {
-        protected Boolean doInBackground(Integer... location){
-            int eventID = location[0];
-            int userID = location[1];
-            ConcertAttend attend = new ConcertAttend();
-            try {
-                URL url = new URL(DBInteraction.api_url + "api/concert/getattendstatus/" + eventID + "/" + userID);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
-                StringBuilder sb = new StringBuilder();
-                try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    br.close();
-                } finally {
-                    urlConnection.disconnect();
-                }
-                String response = sb.toString();
-                response = DBInteraction.cleanJson(response);
-                Gson gson = new GsonBuilder().create();
-                attend = gson.fromJson(response, ConcertAttend.class);
-            }catch(Exception e){
-                System.out.println("Error getting status");
-            }
-            return attend.Going;
-        }
-        protected void onPostExecute(Boolean response) {
-            if(response) {
-                isGoing = true;
-                youGoing = "Going!";
-                updateData();
-                invalidate();
-            }
-        }
-    }
-
     class Toggle extends AsyncTask<String, Void, Void> {
         protected void onPreExecute() {
         }
@@ -444,7 +399,7 @@ public class ConcertView extends View{
                 updateGoing();
                 invalidate();
             }
-            else if(event.getY() >= (302) && event.getY() < (450)){
+            else if(event.getY() >= (402) && event.getY() < (550)){
                 if(ticketLink != null && offset != 0) {
                     Uri uri = Uri.parse(ticketLink);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
