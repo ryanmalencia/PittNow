@@ -149,14 +149,8 @@ public class ConcertView extends View{
         int minw = getPaddingLeft() + getPaddingRight() + getSuggestedMinimumWidth() + 20;
         width = MeasureSpec.getSize(widthMeasureSpec);
         int w = resolveSizeAndState(minw, widthMeasureSpec, 1);
-        int h;
         width = w;
-        if(!ticketAvail) {
-            h = resolveSizeAndState(550, heightMeasureSpec, 0);
-        }
-        else{
-            h = resolveSizeAndState(700, heightMeasureSpec, 0);
-        }
+        int h = resolveSizeAndState(550, heightMeasureSpec, 0);
         height = h;
         setMeasuredDimension(w, h);
     }
@@ -214,11 +208,11 @@ public class ConcertView extends View{
             offset = 0;
         }
         else {
-            offset = 150;
-            canvas.drawRect(0,400,width,402,paint2);
+            offset = 0;
+            canvas.drawRect(0,250,width-380,252,paint2);
             if(ticketLayout != null){
                 canvas.save();
-                canvas.translate(((width)-(int)ticketTextWidth)/2, 430);
+                canvas.translate(((width)-(int)ticketTextWidth-380)/2, 280);
                 ticketLayout.draw(canvas);
                 canvas.restore();
             }
@@ -236,7 +230,7 @@ public class ConcertView extends View{
             canvas.restore();
         }
         if(bandImage != null){
-            canvas.drawBitmap(bandImage,width - height + 150 + offset +20,20,paint);
+            canvas.drawBitmap(bandImage,width - height + 150 +20,20,paint);
         }
         if (venueLayout != null) {
             canvas.save();
@@ -399,8 +393,8 @@ public class ConcertView extends View{
                 updateGoing();
                 invalidate();
             }
-            else if(event.getY() >= (402) && event.getY() < (550)){
-                if(ticketLink != null && offset != 0) {
+            else if(event.getY() >= (250) && event.getY() < (400) && event.getX() < (width-380)){
+                if(ticketLink != null) {
                     Uri uri = Uri.parse(ticketLink);
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     context.startActivity(intent);
