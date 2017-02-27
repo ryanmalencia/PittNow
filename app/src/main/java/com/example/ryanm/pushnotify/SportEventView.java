@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -20,17 +21,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import com.example.ryanm.pushnotify.ApiCalls.SportEventAPI;
 import com.example.ryanm.pushnotify.DataTypes.SportEvent;
-import com.example.ryanm.pushnotify.DataTypes.SportEventAttend;
 import com.example.ryanm.pushnotify.DataTypes.SportLinks;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
@@ -86,6 +82,7 @@ public class SportEventView extends View{
     private float ticketTextWidth;
     private float yougoingtextWidth;
     private SportEventAPI sportEventAPI;
+    private RectF r;
 
     public SportEventView(Context context) {
         super(context);
@@ -109,6 +106,7 @@ public class SportEventView extends View{
         yougoingPaint.setTextSize(50);
         mDetector = new GestureDetector(context,new mListener());
         sportEventAPI = new SportEventAPI();
+
     }
 
     public void setIsHome(boolean is_home) {
@@ -270,7 +268,10 @@ public class SportEventView extends View{
         width = MeasureSpec.getSize(widthMeasureSpec);
         int w = resolveSizeAndState(minw, widthMeasureSpec, 1);
         int h;
-        if(!ticketAvail) {
+        if(!home){
+            h = resolveSizeAndState(300, heightMeasureSpec, 0);
+        }
+        else if(!ticketAvail) {
             h = resolveSizeAndState(450, heightMeasureSpec, 0);
         }
         else{
@@ -287,15 +288,28 @@ public class SportEventView extends View{
         paint2.setColor(Color.LTGRAY);
         paint3.setColor(ContextCompat.getColor(context,R.color.gold));
         ticketPaint.setColor(ContextCompat.getColor(context,R.color.blue));
+
         canvas.drawRect(0,0,width,20,paint2);
-        canvas.drawRect(0, 20, width, 450+offset, paint);
-        if(!ticketAvail) {
+
+        if(!home){
             offset = 0;
+        }
+        else if(!ticketAvail) {
+            offset = 150;
         }
         else
         {
-            offset = 150;
-            canvas.drawRect(0,300,width,302,paint2);
+            offset = 300;
+        }
+
+        canvas.drawRect(0,20, width, 300+offset, paint);
+        if(home) {
+            canvas.drawRect(20, 150 + offset, width-20, 152 + offset, paint2);
+            canvas.drawRect(width / 2, 152 + offset+20, width / 2 + 2, 300 + offset-20, paint2);
+        }
+
+        if(ticketAvail){
+            canvas.drawRect(20,300,width-20, 302,paint2);
             if(ticketLayout != null){
                 canvas.save();
                 canvas.translate(((width)-(int)ticketTextWidth)/2, 375-45);
@@ -303,10 +317,10 @@ public class SportEventView extends View{
                 canvas.restore();
             }
         }
-        canvas.drawRect(0,300+offset,width,302+offset,paint2);
-        canvas.drawRect(width/2,302+offset,width/2+2,450+offset,paint2);
-        if(isGoing) {
-            canvas.drawRect(width/2+1,302+offset,width,450+offset,paint3);
+
+        if(isGoing && home) {
+            r = new RectF(width/2+1+20,152+offset+20,width-20,300+offset-20);
+            canvas.drawRoundRect(r,20, 20, paint3);
         }
         if (sportLayout != null) {
 
@@ -317,10 +331,10 @@ public class SportEventView extends View{
         }
         canvas.drawRect(width*13/16,20,width,150,paint);
         if(schoolImage != null){
-            canvas.drawBitmap(schoolImage,width-435, (height-150-offset)/4+10,png);
+            canvas.drawBitmap(schoolImage,width-435, 300/4+10,png);
         }
         if(sportImage != null) {
-            sportImage.setBounds(canvas.getWidth() - canvas.getHeight() + 200+offset,50,canvas.getWidth() - 30,(canvas.getHeight()-100) -80 -offset);
+            sportImage.setBounds(canvas.getWidth()-250,50,canvas.getWidth() - 30,270);
             sportImage.setColorFilter(ContextCompat.getColor(context, R.color.lightgray), PorterDuff.Mode.SRC_IN);
             sportImage.draw(canvas);
         }
@@ -342,17 +356,19 @@ public class SportEventView extends View{
             broadcastLayout.draw(canvas);
             canvas.restore();
         }
-        if (goingLayout != null) {
-            canvas.save();
-            canvas.translate((((width/2)-(int)goingtextWidth)/2),340+offset);
-            goingLayout.draw(canvas);
-            canvas.restore();
-        }
-        if (yougoingLayout != null) {
-            canvas.save();
-            canvas.translate(width/2 + (((width/2)-(int)yougoingtextWidth)/2),340+offset);
-            yougoingLayout.draw(canvas);
-            canvas.restore();
+        if(home) {
+            if (goingLayout != null) {
+                canvas.save();
+                canvas.translate((((width / 2) - (int) goingtextWidth) / 2), 190 + offset);
+                goingLayout.draw(canvas);
+                canvas.restore();
+            }
+            if (yougoingLayout != null) {
+                canvas.save();
+                canvas.translate(width / 2 + (((width / 2) - (int) yougoingtextWidth) / 2), 190 + offset);
+                yougoingLayout.draw(canvas);
+                canvas.restore();
+            }
         }
     }
 
@@ -471,7 +487,7 @@ public class SportEventView extends View{
         }
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
-            if(event.getX() >= width/2 && event.getY() >= (302 + offset)){
+            if(event.getX() >= width/2 && event.getY() >= (152 + offset)){
                 if(isGoing) {
                     numberGoing--;
                     isGoing = false;
