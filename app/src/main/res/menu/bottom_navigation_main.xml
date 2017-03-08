@@ -23,6 +23,6 @@
         android:id="@+id/action_other"
         android:enabled="true"
         android:icon="@drawable/ic_other"
-        android:title="@string/other"
+        android:title="@string/locations"
         app:showAsAction="ifRoom" />
 </menu>

@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 final Integer [] array = new Integer[2];
                 array[0] = 0;
                 array[1] = UserID;
+                LinearLayout sport = (LinearLayout)findViewById(R.id.sport_events);
+                LinearLayout location = (LinearLayout)findViewById(R.id.locations);
                 switch (item.getItemId()) {
                     case R.id.action_campus:
                         dataIndex = 0;
@@ -75,11 +77,15 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                     case R.id.action_sports:
                         dataIndex = 0;
                         SelectedIndex = 0;
+                        location.setVisibility(View.GONE);
+                        sport.setVisibility(View.VISIBLE);
                         new RetrieveSportData().execute(array);
                         break;
                     case R.id.action_other:
                         dataIndex = 0;
                         SelectedIndex = 3;
+                        sport.setVisibility(View.GONE);
+                        location.setVisibility(View.VISIBLE);
                         break;
                 }
                 return true;
@@ -282,5 +288,36 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
             }
             status.setVisibility(View.GONE);
         }
+    }
+
+    class RetrieveLocations extends AsyncTask<Integer, Void, String> {
+        int index = 0;
+        protected void onPreExecute() {
+            status.setVisibility(View.VISIBLE);
+        }
+
+        protected String doInBackground(Integer... position){
+            return "";
+        }
+
+        protected void onPostExecute(String response) {
+            System.out.println(index);
+            LinearLayout layout= (LinearLayout)findViewById(R.id.sport_events);
+            if(index == 0) {
+                layout.removeViews(0,layout.getChildCount()-1);
+            }
+            finishedGet = true;
+            swipe.setRefreshing(false);
+            if(index == 0){
+                scroll.fullScroll(ScrollView.FOCUS_UP);
+                scroll.fullScroll(ScrollView.FOCUS_UP);
+            }
+            status.setVisibility(View.GONE);
+        }
+    }
+
+    public void OpenPrint(View view){
+        Intent intent = new Intent(this, Print.class);
+        startActivity(intent);
     }
 }
