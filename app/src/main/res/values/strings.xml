@@ -7,4 +7,5 @@
     <string name="other">Other</string>
     <string name="locations">Locations</string>
     <string name="print">Printing Stations</string>
+    <string name="title_activity_print_map">Map</string>
 </resources>

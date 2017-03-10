@@ -1,5 +1,6 @@
 package com.example.ryanm.pushnotify;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,7 +51,8 @@ public class Print extends AppCompatActivity {
     }
 
     public void OpenPrintMap(View view){
-
+        Intent intent = new Intent(this, PrintMap.class);
+        startActivity(intent);
     }
 
     class RetrieveLocations extends AsyncTask<Integer, Void, String> {
