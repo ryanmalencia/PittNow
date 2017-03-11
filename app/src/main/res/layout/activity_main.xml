@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context="com.example.ryanm.pushnotify.MainActivity">
 
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/pagetitle"
+        android:text="Sporting Events"
+        android:layout_margin="15dp"
+        android:textSize="25sp" />
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -21,12 +32,13 @@
         android:id="@+id/activity_main_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/bottom_navigation">
+        android:layout_above="@id/bottom_navigation"
+        android:layout_below="@id/pagetitle">
         <com.example.ryanm.pushnotify.CustomScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/myscroll">
+            android:id="@+id/myscroll"
+            android:layout_alignParentTop="true">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,11 +49,11 @@
                     android:orientation="vertical"
                     android:id="@+id/sport_events">
                     <ProgressBar
+                        android:id="@+id/status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:indeterminate="true"
                         android:layout_gravity="center"
-                        android:id="@+id/status"/>
+                        android:indeterminate="true" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -59,4 +71,5 @@
             </LinearLayout>
         </com.example.ryanm.pushnotify.CustomScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
+
 </RelativeLayout>

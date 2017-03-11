@@ -33,11 +33,7 @@ public class Print extends AppCompatActivity {
         }
         setTitle(getString(R.string.print));
 
-        LinearLayout layout= (LinearLayout)findViewById(R.id.printlayout);
-        TextView temp = new TextView(getApplicationContext());
-        temp.setText("Testing");
-        layout.addView(temp);
-        //new RetrieveLocations().execute();
+        new RetrieveLocations().execute();
     }
 
     @Override

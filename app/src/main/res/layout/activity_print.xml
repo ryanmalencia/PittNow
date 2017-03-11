@@ -6,30 +6,31 @@
     android:layout_height="match_parent"
     tools:context="com.example.ryanm.pushnotify.Print">
 
-    <Button
-        android:id="@+id/viewprintmap"
-        android:layout_width="match_parent"
+    <TextView
         android:layout_height="wrap_content"
-        android:text="View Map"
-        android:background="@color/lightgray"
+        android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
-        android:onClick="OpenPrintMap"/>
+        android:id="@+id/locationtitle"
+        android:text="Locations"
+        android:layout_marginTop="15dp"
+        android:textSize="25sp"/>
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/viewprintmap"
-        android:id="@+id/locationtitle"
-        android:text="Locations"
-        android:layout_margin="15dp"
-        android:textSize="25sp"/>
+        android:layout_below="@+id/locationtitle"
+        android:id="@+id/asterisk"
+        android:text="* access only to residents"
+        android:layout_margin="5dp"
+        android:textSize="15sp"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView2"
-        android:layout_below="@+id/locationtitle">
+        android:layout_below="@+id/asterisk"
+        android:layout_above="@+id/viewprintmap">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,4 +39,14 @@
             android:id="@+id/printlayout">
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/viewprintmap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Map"
+        android:background="@color/lightgray"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="OpenPrintMap"/>
 </RelativeLayout>

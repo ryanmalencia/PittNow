@@ -8,21 +8,15 @@
         android:title="@string/sports"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_concerts"
-        android:enabled="true"
-        android:icon="@drawable/ic_concerts"
-        android:title="@string/concerts"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/action_campus"
         android:enabled="true"
         android:icon="@drawable/ic_campus"
         android:title="@string/campus"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_other"
+        android:id="@+id/action_location"
         android:enabled="true"
-        android:icon="@drawable/ic_other"
+        android:icon="@drawable/ic_locations"
         android:title="@string/locations"
         app:showAsAction="ifRoom" />
 </menu>

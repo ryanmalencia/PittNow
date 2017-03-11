@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
 
         scroll = (CustomScrollView) findViewById(R.id.myscroll);
         scroll.setScrollViewListener(this);
-
+        final TextView header = (TextView)findViewById(R.id.pagetitle);
         //Do Stuff based on a change of selected item in Bottom Nav View
         bottomNavigationView.setOnNavigationItemSelectedListener(
         new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,27 +65,26 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 LinearLayout sport = (LinearLayout)findViewById(R.id.sport_events);
                 LinearLayout location = (LinearLayout)findViewById(R.id.locations);
                 switch (item.getItemId()) {
-                    case R.id.action_campus:
-                        dataIndex = 0;
-                        SelectedIndex = 2;
-                        break;
-                    case R.id.action_concerts:
-                        dataIndex = 0;
-                        SelectedIndex = 1;
-                        new RetrieveConcertData().execute(array);
-                        break;
                     case R.id.action_sports:
                         dataIndex = 0;
                         SelectedIndex = 0;
                         location.setVisibility(View.GONE);
                         sport.setVisibility(View.VISIBLE);
+                        header.setText("Sporting Events");
                         new RetrieveSportData().execute(array);
                         break;
-                    case R.id.action_other:
+                    case R.id.action_campus:
                         dataIndex = 0;
-                        SelectedIndex = 3;
+                        SelectedIndex = 1;
+                        header.setText("Campus Events");
+                        break;
+                    case R.id.action_location:
+                        dataIndex = 0;
+                        SelectedIndex = 2;
                         sport.setVisibility(View.GONE);
                         location.setVisibility(View.VISIBLE);
+                        header.setText("Campus Locations");
+//                      //new RetrieveLocationData().execute();
                         break;
                 }
                 return true;

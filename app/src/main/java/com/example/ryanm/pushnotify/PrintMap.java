@@ -44,7 +44,6 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_print_map);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -53,14 +52,11 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
         locReq = new LocationRequest();
         locReq.setInterval(1000);
         locReq.setSmallestDisplacement(2);
         locReq.setMaxWaitTime(5000);
-
         locationListener = new MyLocationListener();
-
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},10);
         }
@@ -70,9 +66,7 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-
         LatLng campus = new LatLng(40.442848, -79.956010);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         Location temp = null;
         mGoogleApiClient.connect();
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -136,12 +130,10 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
         public void onLocationChanged(Location loc) {
             double longitude = loc.getLongitude();
             double lat = loc.getLatitude();
-
             LatLng current = new LatLng(lat, longitude);
             if(!centered) {
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(current));
                 centered = true;
-                System.out.println("Map Adjusted");
             }
         }
     }
@@ -182,7 +174,6 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
                 LocationCollection locations;
                 locations = gson.fromJson(response, LocationCollection.class);
-
                 for(int i = 0; i < locations.Locations.length; i++){
                     LatLng temp = new LatLng(locations.Locations[i].Latitude,locations.Locations[i].Longitude);
                     mMap.addMarker(new MarkerOptions().position(temp).title(locations.Locations[i].Name));
