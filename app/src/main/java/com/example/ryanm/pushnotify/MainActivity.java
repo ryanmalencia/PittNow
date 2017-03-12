@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                         sport.setVisibility(View.GONE);
                         location.setVisibility(View.VISIBLE);
                         header.setText("Campus Locations");
-//                      //new RetrieveLocationData().execute();
                         break;
                 }
                 return true;
@@ -289,34 +288,12 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
         }
     }
 
-    class RetrieveLocations extends AsyncTask<Integer, Void, String> {
-        int index = 0;
-        protected void onPreExecute() {
-            status.setVisibility(View.VISIBLE);
-        }
-
-        protected String doInBackground(Integer... position){
-            return "";
-        }
-
-        protected void onPostExecute(String response) {
-            System.out.println(index);
-            LinearLayout layout= (LinearLayout)findViewById(R.id.sport_events);
-            if(index == 0) {
-                layout.removeViews(0,layout.getChildCount()-1);
-            }
-            finishedGet = true;
-            swipe.setRefreshing(false);
-            if(index == 0){
-                scroll.fullScroll(ScrollView.FOCUS_UP);
-                scroll.fullScroll(ScrollView.FOCUS_UP);
-            }
-            status.setVisibility(View.GONE);
-        }
-    }
-
     public void OpenPrint(View view){
         Intent intent = new Intent(this, Print.class);
+        startActivity(intent);
+    }
+    public void OpenDining(View view){
+        Intent intent = new Intent(this, Dining.class);
         startActivity(intent);
     }
 }

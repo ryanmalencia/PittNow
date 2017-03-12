@@ -67,6 +67,12 @@
                         android:text="@string/print"
                         android:onClick="OpenPrint">
                     </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/dining"
+                        android:onClick="OpenDining">
+                    </Button>
                 </LinearLayout>
             </LinearLayout>
         </com.example.ryanm.pushnotify.CustomScrollView>

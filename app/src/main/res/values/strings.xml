@@ -8,4 +8,6 @@
     <string name="locations">Locations</string>
     <string name="print">Printing Stations</string>
     <string name="title_activity_print_map">Map</string>
+    <string name="dining">Campus Dining</string>
+    <string name="title_activity_dining_maps">Map</string>
 </resources>

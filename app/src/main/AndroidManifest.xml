@@ -73,7 +73,11 @@
 
         <activity
             android:name=".PrintMap"
-            android:label="@string/title_activity_print_map"></activity>
+            android:label="@string/title_activity_print_map" />
+        <activity android:name=".Dining" />
+        <activity
+            android:name=".DiningMaps"
+            android:label="@string/title_activity_dining_maps"></activity>
     </application>
 
 </manifest>
