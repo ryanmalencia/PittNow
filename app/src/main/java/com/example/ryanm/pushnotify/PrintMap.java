@@ -65,7 +65,9 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }
         LatLng campus = new LatLng(40.442848, -79.956010);
         Location temp = null;
         mGoogleApiClient.connect();

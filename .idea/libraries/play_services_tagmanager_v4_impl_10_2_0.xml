@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="play-services-tagmanager-v4-impl-10.2.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/5b086881681caa1e08df456a567b0da3e128facd/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/5b086881681caa1e08df456a567b0da3e128facd/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/966886373215c608faa6fbc0e59e618f5b730a18/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/966886373215c608faa6fbc0e59e618f5b730a18/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
