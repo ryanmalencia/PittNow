@@ -7,14 +7,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.example.ryanm.pushnotify.DataTypes.ConcertCollection;
 import com.example.ryanm.pushnotify.DataTypes.PrintCollection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -47,7 +43,8 @@ public class Print extends AppCompatActivity {
     }
 
     public void OpenPrintMap(View view){
-        Intent intent = new Intent(this, PrintMap.class);
+        Intent intent = new Intent(this, ShowMap.class);
+        intent.putExtra("apicall","api/location/getprintlocations");
         startActivity(intent);
     }
 

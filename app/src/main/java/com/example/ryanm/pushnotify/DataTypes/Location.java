@@ -5,6 +5,7 @@ public class Location {
     public double Longitude;
     public double Latitude;
     public String Name;
+    public String SubTitle;
 
     public Location(){
     }

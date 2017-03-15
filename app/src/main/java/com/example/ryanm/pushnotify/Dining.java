@@ -8,11 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.example.ryanm.pushnotify.DataTypes.PrintCollection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -35,7 +33,8 @@ public class Dining extends AppCompatActivity {
     }
 
     public void OpenDiningMap(View view){
-        Intent intent = new Intent(this,DiningMaps.class);
+        Intent intent = new Intent(this,ShowMap.class);
+        intent.putExtra("apicall","api/location/getdiningcoords");
         startActivity(intent);
     }
 

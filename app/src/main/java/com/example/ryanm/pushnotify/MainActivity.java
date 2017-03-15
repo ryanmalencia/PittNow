@@ -10,12 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.example.ryanm.pushnotify.DataTypes.ConcertCollection;
 import com.example.ryanm.pushnotify.DataTypes.DeviceEnvironment;
 import com.example.ryanm.pushnotify.DataTypes.SportEventCollection;
@@ -55,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
         new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                 finishedGet = true;
                 DevEnv = new DeviceEnvironment(getApplicationContext());
                 UserID = DevEnv.GetUserID();
@@ -70,20 +67,20 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                         SelectedIndex = 0;
                         location.setVisibility(View.GONE);
                         sport.setVisibility(View.VISIBLE);
-                        header.setText("Sporting Events");
+                        header.setText(getString(R.string.sport_title));
                         new RetrieveSportData().execute(array);
                         break;
                     case R.id.action_campus:
                         dataIndex = 0;
                         SelectedIndex = 1;
-                        header.setText("Campus Events");
+                        header.setText(getString(R.string.campus_event_title));
                         break;
                     case R.id.action_location:
                         dataIndex = 0;
                         SelectedIndex = 2;
                         sport.setVisibility(View.GONE);
                         location.setVisibility(View.VISIBLE);
-                        header.setText("Campus Locations");
+                        header.setText(getString(R.string.campus_location_title));
                         break;
                 }
                 return true;
@@ -110,8 +107,8 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 if(SelectedIndex == 0) {
                     new RetrieveSportData().execute(array);
                 }
-                else if(SelectedIndex == 1) {
-                    new RetrieveConcertData().execute(array);
+                else {
+                    swipe.setRefreshing(false);
                 }
                 dataIndex = 0;
             }
@@ -138,12 +135,8 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
             }
         }
     }
-
-    /**
-     * Get SportEvent Data (closest 10 to today's date)
-     *
-     */
-    class RetrieveSportData extends AsyncTask<Integer, Void, String> {
+    
+    private class RetrieveSportData extends AsyncTask<Integer, Void, String> {
         int index = 0;
         int User = 0;
         protected void onPreExecute() {
@@ -187,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
 
             if(response == null) {
                 TextView view = new TextView(getApplicationContext());
-                view.setText("Error getting data");
+                view.setText(getString(R.string.data_error));
                 layout.removeViews(0,layout.getChildCount()-1);
                 layout.addView(view);
             }
@@ -216,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
         }
     }
 
-    class RetrieveConcertData extends AsyncTask<Integer, Void, String> {
+    private class RetrieveConcertData extends AsyncTask<Integer, Void, String> {
         int index = 0;
         int User = 0;
         protected void onPreExecute() {
@@ -260,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
 
             if(response == null) {
                 TextView view = new TextView(getApplicationContext());
-                view.setText("Error getting data");
+                view.setText(getString(R.string.data_error));
                 layout.removeViews(0,layout.getChildCount()-1);
                 layout.addView(view);
             }

@@ -7,11 +7,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.example.ryanm.pushnotify.DataTypes.LocationCollection;
-import com.example.ryanm.pushnotify.DataTypes.PrintCollection;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -25,13 +21,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class PrintMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class ShowMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
@@ -60,6 +55,7 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},10);
         }
+
     }
 
     @Override
@@ -81,15 +77,17 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
             mMap.moveCamera(CameraUpdateFactory.newLatLng(campus));
         }
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        String apicall = getIntent().getStringExtra("apicall");
         if(!gotMarkers) {
-            new RetrieveLocations().execute();
-            gotMarkers = true;
+            if(apicall != null && !apicall.equals("")) {
+                new RetrieveLocations().execute(apicall);
+                gotMarkers = true;
+            }
         }
     }
 
     @Override
-    public void onConnectionSuspended(int i)
-    {
+    public void onConnectionSuspended(int i) {
         readyForMaps = false;
     }
 
@@ -140,13 +138,14 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
         }
     }
 
-    class RetrieveLocations extends AsyncTask<Integer, Void, String> {
+    class RetrieveLocations extends AsyncTask<String, Void, String> {
         protected void onPreExecute() {
         }
 
-        protected String doInBackground(Integer... position){
+        protected String doInBackground(String... apicalls){
             try {
-                URL url = new URL(DBInteraction.api_url + "api/location/getprintlocations");
+                String api = apicalls[0];
+                URL url = new URL(DBInteraction.api_url + api);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -178,7 +177,7 @@ public class PrintMap extends FragmentActivity implements OnMapReadyCallback, Go
                 locations = gson.fromJson(response, LocationCollection.class);
                 for(int i = 0; i < locations.Locations.length; i++){
                     LatLng temp = new LatLng(locations.Locations[i].Latitude,locations.Locations[i].Longitude);
-                    mMap.addMarker(new MarkerOptions().position(temp).title(locations.Locations[i].Name));
+                    mMap.addMarker(new MarkerOptions().position(temp).title(locations.Locations[i].Name)).setSnippet(locations.Locations[i].SubTitle);
                 }
             }
         }

@@ -72,12 +72,9 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".PrintMap"
+            android:name=".ShowMap"
             android:label="@string/title_activity_print_map" />
         <activity android:name=".Dining" />
-        <activity
-            android:name=".DiningMaps"
-            android:label="@string/title_activity_dining_maps"></activity>
     </application>
 
 </manifest>
