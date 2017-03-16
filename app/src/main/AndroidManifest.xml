@@ -75,6 +75,10 @@
             android:name=".ShowMap"
             android:label="@string/title_activity_print_map" />
         <activity android:name=".Dining" />
+        <activity android:name=".Fitness" />
+        <activity android:name=".Library" />
+        <activity android:name=".Computer" />
+        <activity android:name=".Links"></activity>
     </application>
 
 </manifest>

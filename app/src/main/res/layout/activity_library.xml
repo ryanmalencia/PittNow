@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_print"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ryanm.pushnotify.Library">
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/librarytitle"
+        android:text="Locations"
+        android:layout_marginTop="15dp"
+        android:textSize="25sp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView2"
+        android:layout_below="@+id/librarytitle"
+        android:layout_above="@+id/viewlibrarymap">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:id="@+id/librarylayout">
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/viewlibrarymap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Map"
+        android:background="@color/lightgray"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="OpenLibraryMap"/>
+</RelativeLayout>

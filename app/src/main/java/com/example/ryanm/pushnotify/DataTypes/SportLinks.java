@@ -16,4 +16,8 @@ public class SportLinks {
     public String Football(){
         return "https://ev12.evenue.net/cgi-bin/ncommerce3/SEGetGroupList?groupCode=F&linkID=pitt&shopperContext=&caller=&appCode=";
     }
+
+    public String BaseBall(){
+        return "https://ev12.evenue.net/cgi-bin/ncommerce3/SEGetEventList?groupCode=BSB&linkID=pitt&shopperContext=&caller=&appCode=";
+    }
 }

@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
             }
         }
     }
-    
+
     private class RetrieveSportData extends AsyncTask<Integer, Void, String> {
         int index = 0;
         int User = 0;
@@ -287,6 +287,22 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
     }
     public void OpenDining(View view){
         Intent intent = new Intent(this, Dining.class);
+        startActivity(intent);
+    }
+    public void OpenFitness(View view){
+        Intent intent = new Intent(this, Fitness.class);
+        startActivity(intent);
+    }
+    public void OpenLibrary(View view){
+        Intent intent = new Intent(this, Library.class);
+        startActivity(intent);
+    }
+    public void OpenComputer(View view){
+        Intent intent = new Intent(this, Computer.class);
+        startActivity(intent);
+    }
+    public void OpenLinks(View view){
+        Intent intent = new Intent(this, Links.class);
         startActivity(intent);
     }
 }

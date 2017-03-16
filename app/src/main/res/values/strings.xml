@@ -9,9 +9,22 @@
     <string name="print">Printing Stations</string>
     <string name="title_activity_print_map">Map</string>
     <string name="dining">Campus Dining</string>
+    <string name="fitness">Fitness Centers</string>
+    <string name="library">Libraries</string>
+    <string name="computer">Computing Labs</string>
+    <string name="links">Quick Links</string>
     <string name="title_activity_dining_maps">Map</string>
     <string name="sport_title">Sporting Events</string>
     <string name="campus_event_title">Campus Events</string>
     <string name="campus_location_title">Campus Locations</string>
     <string name="data_error">Error Getting Data</string>
+    <string name="courseweb">CourseWeb</string>
+    <string name="mypitt">MyPitt</string>
+    <string name="email">Pitt Email</string>
+    <string name="panthercentral">Panther Central</string>
+    <string name="housing">Housing</string>
+    <string name="tech">Technology</string>
+    <string name="pay">PittPay</string>
+    <string name="athletics">Athletics</string>
+    <string name="news">News</string>
 </resources>

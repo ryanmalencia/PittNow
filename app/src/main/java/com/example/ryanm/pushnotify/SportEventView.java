@@ -150,6 +150,8 @@ public class SportEventView extends View{
                 break;
             case "Baseball":
                 sportImage = ContextCompat.getDrawable(context,R.drawable.ic_baseball);
+                ticketAvail = true;
+                ticketlink = links.BaseBall();
                 break;
             case "Softball":
                 sportImage = ContextCompat.getDrawable(context,R.drawable.ic_baseball);
