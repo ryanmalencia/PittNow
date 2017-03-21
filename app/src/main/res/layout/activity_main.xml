@@ -100,6 +100,74 @@
                         android:onClick="OpenLinks">
                     </Button>
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/events"
+                    android:visibility="gone">
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/concerts"
+                        android:onClick="OpenEvents"
+                        android:layout_marginTop="5dp">
+                    </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/conference"
+                        android:onClick="OpenEvents">
+                    </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/display"
+                        android:onClick="OpenEvents">
+                    </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/fairmarketplace"
+                        android:onClick="OpenEvents">
+                    </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/fitnessclass"
+                        android:onClick="OpenEvents">
+                    </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/fundraiser"
+                        android:onClick="OpenEvents">
+                    </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/meeting"
+                        android:onClick="OpenEvents">
+                    </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/movie"
+                        android:onClick="OpenEvents">
+                    </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/performance"
+                        android:onClick="OpenEvents">
+                    </Button>
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/tournament"
+                        android:onClick="OpenEvents">
+                    </Button>
+                </LinearLayout>
             </LinearLayout>
         </com.example.ryanm.pushnotify.CustomScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -61,18 +62,23 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 array[1] = UserID;
                 LinearLayout sport = (LinearLayout)findViewById(R.id.sport_events);
                 LinearLayout location = (LinearLayout)findViewById(R.id.locations);
+                LinearLayout event = (LinearLayout)findViewById(R.id.events);
                 switch (item.getItemId()) {
                     case R.id.action_sports:
                         dataIndex = 0;
                         SelectedIndex = 0;
                         location.setVisibility(View.GONE);
                         sport.setVisibility(View.VISIBLE);
+                        event.setVisibility(View.GONE);
                         header.setText(getString(R.string.sport_title));
                         new RetrieveSportData().execute(array);
                         break;
                     case R.id.action_campus:
                         dataIndex = 0;
                         SelectedIndex = 1;
+                        sport.setVisibility(View.GONE);
+                        location.setVisibility(View.GONE);
+                        event.setVisibility(View.VISIBLE);
                         header.setText(getString(R.string.campus_event_title));
                         break;
                     case R.id.action_location:
@@ -80,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                         SelectedIndex = 2;
                         sport.setVisibility(View.GONE);
                         location.setVisibility(View.VISIBLE);
+                        event.setVisibility(View.GONE);
                         header.setText(getString(R.string.campus_location_title));
                         break;
                 }
@@ -125,13 +132,6 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 array[1] = UserID;
                 finishedGet = false;
                 new RetrieveSportData().execute(array);
-            }
-            else if(SelectedIndex == 1) {
-                Integer[] array = new Integer[2];
-                array[0] = dataIndex;
-                array[1] = UserID;
-                finishedGet = false;
-                new RetrieveConcertData().execute(array);
             }
         }
     }
@@ -303,6 +303,13 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
     }
     public void OpenLinks(View view){
         Intent intent = new Intent(this, Links.class);
+        startActivity(intent);
+    }
+    public void OpenEvents(View view){
+        Button button = (Button)view;
+        String type = button.getText().toString();
+        Intent intent = new Intent(this, ShowEvents.class);
+        intent.putExtra("type",type);
         startActivity(intent);
     }
 }

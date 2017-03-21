@@ -78,7 +78,8 @@
         <activity android:name=".Fitness" />
         <activity android:name=".Library" />
         <activity android:name=".Computer" />
-        <activity android:name=".Links"></activity>
+        <activity android:name=".Links" />
+        <activity android:name=".ShowEvents"></activity>
     </application>
 
 </manifest>
