@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.ryanm.pushnotify.ShowMap">
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
@@ -19,6 +19,6 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/spinner1"
+        android:layout_below="@id/spinner"
         tools:context="com.example.ryanm.pushnotify.ShowMap" />
 </RelativeLayout>

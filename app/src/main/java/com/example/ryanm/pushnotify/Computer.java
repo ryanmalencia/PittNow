@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class Computer extends AppCompatActivity {
     public void OpenComputerMap(View view){
         Intent intent = new Intent(this,ShowMap.class);
         intent.putExtra("apicall","api/location/getcomputercoords");
+        intent.putExtra("map",getString(R.string.computer));
         startActivity(intent);
     }
 

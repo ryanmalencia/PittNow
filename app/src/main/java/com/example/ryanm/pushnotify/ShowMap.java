@@ -7,6 +7,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import com.example.ryanm.pushnotify.DataTypes.LocationCollection;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,7 +30,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ShowMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class ShowMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, AdapterView.OnItemSelectedListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
@@ -55,8 +59,62 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},10);
         }
-
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.location_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+        int position = 0;
+        String map = getIntent().getStringExtra("map");
+        switch(map){
+            case "Campus Dining":
+                position = 0;
+                break;
+            case "Computing Labs":
+                position = 1;
+                break;
+            case "Fitness Centers":
+                position = 2;
+                break;
+            case "Libraries":
+                position = 3;
+                break;
+            case "Printing Stations":
+                position = 4;
+                break;
+        }
+        spinner.setSelection(position);
     }
+
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        switch(pos){
+            case 0:
+                mMap.clear();
+                new RetrieveLocations().execute("api/location/getdiningcoords");
+                break;
+            case 1:
+                mMap.clear();
+                new RetrieveLocations().execute("api/location/getcomputercoords");
+                break;
+            case 2:
+                mMap.clear();
+                new RetrieveLocations().execute("api/location/getfitnesscoords");
+                break;
+            case 3:
+                mMap.clear();
+                new RetrieveLocations().execute("api/location/getlibrarycoords");
+                break;
+            case 4:
+                mMap.clear();
+                new RetrieveLocations().execute("api/location/getprintlocations");
+                break;
+        }
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -138,7 +196,7 @@ public class ShowMap extends FragmentActivity implements OnMapReadyCallback, Goo
         }
     }
 
-    class RetrieveLocations extends AsyncTask<String, Void, String> {
+    private class RetrieveLocations extends AsyncTask<String, Void, String> {
         protected void onPreExecute() {
         }
 

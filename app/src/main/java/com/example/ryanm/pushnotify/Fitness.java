@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class Fitness extends AppCompatActivity {
     public void OpenFitnessMap(View view){
         Intent intent = new Intent(this,ShowMap.class);
         intent.putExtra("apicall","api/location/getfitnesscoords");
+        intent.putExtra("map",getString(R.string.fitness));
         startActivity(intent);
     }
 

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.ryanm.pushnotify.DataTypes.PrintCollection;
@@ -35,6 +36,7 @@ public class Dining extends AppCompatActivity {
     public void OpenDiningMap(View view){
         Intent intent = new Intent(this,ShowMap.class);
         intent.putExtra("apicall","api/location/getdiningcoords");
+        intent.putExtra("map",getString(R.string.dining));
         startActivity(intent);
     }
 
@@ -48,7 +50,7 @@ public class Dining extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class RetrieveLocations extends AsyncTask<Integer, Void, String> {
+    private class RetrieveLocations extends AsyncTask<Integer, Void, String> {
         protected void onPreExecute() {
         }
 
@@ -83,7 +85,7 @@ public class Dining extends AppCompatActivity {
 
             if(response == null) {
                 TextView view = new TextView(getApplicationContext());
-                view.setText("Error getting data");
+                view.setText(getString(R.string.data_error));
                 layout.removeViews(0,layout.getChildCount()-1);
                 layout.addView(view);
             }

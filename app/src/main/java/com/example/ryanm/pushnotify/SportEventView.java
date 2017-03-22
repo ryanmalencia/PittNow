@@ -73,7 +73,7 @@ public class SportEventView extends View{
     private GestureDetector mDetector;
     private int width;
     private int offset;
-    private int height;
+    int height;
     private int numberGoing;
     private int User = 0;
     private float textWidth;
@@ -82,7 +82,7 @@ public class SportEventView extends View{
     private float ticketTextWidth;
     private float yougoingtextWidth;
     private SportEventAPI sportEventAPI;
-    private RectF r;
+    RectF r;
 
     public SportEventView(Context context) {
         super(context);
@@ -374,7 +374,7 @@ public class SportEventView extends View{
         }
     }
 
-    class RetrieveData extends AsyncTask<String, Void, Bitmap> {
+    private class RetrieveData extends AsyncTask<String, Void, Bitmap> {
         protected void onPreExecute() {
         }
         protected Bitmap doInBackground(String... location){
@@ -425,7 +425,7 @@ public class SportEventView extends View{
         }
     }
 
-    class ReadBitmapFile extends AsyncTask<String, Void, Bitmap> {
+    private class ReadBitmapFile extends AsyncTask<String, Void, Bitmap> {
         protected void onPreExecute() {
         }
         protected Bitmap doInBackground(String... location){
@@ -450,7 +450,7 @@ public class SportEventView extends View{
         }
     }
 
-    class Toggle extends AsyncTask<String, Void, Void> {
+    private class Toggle extends AsyncTask<String, Void, Void> {
         protected void onPreExecute() {
         }
         protected Void doInBackground(String... location){
@@ -482,7 +482,7 @@ public class SportEventView extends View{
         return mDetector.onTouchEvent(event);
     }
 
-    class mListener extends GestureDetector.SimpleOnGestureListener {
+    private class mListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onDown(MotionEvent event) {
             return true;

@@ -8,6 +8,7 @@ import android.support.multidex.MultiDex;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
     private DeviceEnvironment DevEnv;
     public static boolean finishedGet = true;
     private static int dataIndex = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +136,13 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 new RetrieveSportData().execute(array);
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     private class RetrieveSportData extends AsyncTask<Integer, Void, String> {
@@ -310,6 +319,14 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
         String type = button.getText().toString();
         Intent intent = new Intent(this, ShowEvents.class);
         intent.putExtra("type",type);
+        startActivity(intent);
+    }
+    public void openAbout(MenuItem item) {
+        Intent intent = new Intent(this, About.class);
+        startActivity(intent);
+    }
+    public void openSettings(MenuItem item) {
+        Intent intent = new Intent(this, Settings.class);
         startActivity(intent);
     }
 }

@@ -99,7 +99,7 @@ public class SignIn extends AppCompatActivity implements GoogleApiClient.OnConne
         }
     }
 
-    class AddUser extends AsyncTask<String, Void, Void> {
+    private class AddUser extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... theuser){
             try {
                 String the_user = theuser[0];
