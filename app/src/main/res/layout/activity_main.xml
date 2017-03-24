@@ -93,12 +93,6 @@
                         android:text="@string/print"
                         android:onClick="OpenPrint">
                     </Button>
-                    <Button
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"
-                        android:text="@string/links"
-                        android:onClick="OpenLinks">
-                    </Button>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -168,6 +162,113 @@
                         android:onClick="OpenEvents">
                     </Button>
                 </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:id="@+id/links"
+                    android:visibility="gone">
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/courseweb"
+                        android:gravity="center"
+                        android:id="@+id/button1"
+
+                        android:onClick="openCourseweb" />
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/mypitt"
+                        android:gravity="center"
+                        android:id="@+id/button2"
+
+                        android:onClick="openMyPitt"
+                        android:layout_below="@id/button1"
+                        />
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/email"
+                        android:id="@+id/button3"
+                        android:gravity="center"
+
+                        android:onClick="openEmail"
+                        android:layout_below="@id/button2"
+                        />
+                    <Button
+
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/panthercentral"
+                        android:id="@+id/button4"
+                        android:gravity="center"
+
+                        android:onClick="openPantherCentral"
+                        android:layout_below="@id/button3"
+                        />
+                    <Button
+
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/housing"
+                        android:id="@+id/button5"
+                        android:gravity="center"
+
+                        android:onClick="openHousing"
+                        android:layout_below="@id/button4"
+                        />
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/tech"
+                        android:id="@+id/button6"
+                        android:gravity="center"
+
+                        android:onClick="openTech"
+                        android:layout_below="@id/button5"
+                        />
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/pay"
+                        android:id="@+id/button7"
+                        android:gravity="center"
+
+                        android:onClick="openPay"
+                        android:layout_below="@id/button6"
+                        />
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/library"
+                        android:id="@+id/button8"
+                        android:gravity="center"
+
+                        android:onClick="openLibrary"
+                        android:layout_below="@id/button7"
+                        />
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/athletics"
+                        android:id="@+id/button9"
+                        android:gravity="center"
+
+                        android:onClick="openAthletics"
+                        android:layout_below="@id/button8"
+                        />
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:text="@string/news"
+                        android:id="@+id/button10"
+                        android:gravity="center"
+
+                        android:onClick="openNews"
+                        android:layout_below="@id/button9" />
+                </RelativeLayout>
             </LinearLayout>
         </com.example.ryanm.pushnotify.CustomScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>

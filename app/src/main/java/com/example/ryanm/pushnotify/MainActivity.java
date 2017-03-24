@@ -1,6 +1,7 @@
 package com.example.ryanm.pushnotify;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.example.ryanm.pushnotify.DataTypes.ConcertCollection;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                 LinearLayout sport = (LinearLayout)findViewById(R.id.sport_events);
                 LinearLayout location = (LinearLayout)findViewById(R.id.locations);
                 LinearLayout event = (LinearLayout)findViewById(R.id.events);
+                RelativeLayout links = (RelativeLayout)findViewById(R.id.links);
                 switch (item.getItemId()) {
                     case R.id.action_sports:
                         dataIndex = 0;
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                         location.setVisibility(View.GONE);
                         sport.setVisibility(View.VISIBLE);
                         event.setVisibility(View.GONE);
+                        links.setVisibility(View.GONE);
                         header.setText(getString(R.string.sport_title));
                         new RetrieveSportData().execute(array);
                         break;
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                         sport.setVisibility(View.GONE);
                         location.setVisibility(View.GONE);
                         event.setVisibility(View.VISIBLE);
+                        links.setVisibility(View.GONE);
                         header.setText(getString(R.string.campus_event_title));
                         break;
                     case R.id.action_location:
@@ -89,7 +94,17 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
                         sport.setVisibility(View.GONE);
                         location.setVisibility(View.VISIBLE);
                         event.setVisibility(View.GONE);
+                        links.setVisibility(View.GONE);
                         header.setText(getString(R.string.campus_location_title));
+                        break;
+                    case R.id.action_links:
+                        dataIndex = 0;
+                        SelectedIndex = 3;
+                        sport.setVisibility(View.GONE);
+                        location.setVisibility(View.GONE);
+                        event.setVisibility(View.GONE);
+                        links.setVisibility(View.VISIBLE);
+                        header.setText(getString(R.string.links));
                         break;
                 }
                 return true;
@@ -327,6 +342,56 @@ public class MainActivity extends AppCompatActivity implements ScrollListener {
     }
     public void openSettings(MenuItem item) {
         Intent intent = new Intent(this, Settings.class);
+        startActivity(intent);
+    }
+    public void openCourseweb(View view) {
+        Uri uri = Uri.parse("https://courseweb.pitt.edu");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+    public void openMyPitt(View view) {
+        Uri uri = Uri.parse("https://my.pitt.edu");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+    public void openEmail(View view) {
+        Uri uri = Uri.parse("https://outlook.office.com/owa/?realm=pitt.edu#path=/mail");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+    public void openPantherCentral(View view) {
+        Uri uri = Uri.parse("https://www.pc.pitt.edu/");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+    public void openHousing(View view) {
+        Uri uri = Uri.parse("https://www.pc.pitt.edu/housing/");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+    public void openTech(View view) {
+        Uri uri = Uri.parse("http://www.technology.pitt.edu/");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+    public void openPay(View view) {
+        Uri uri = Uri.parse("http://www.payments.pitt.edu/index.html");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+    public void openLibrary(View view) {
+        Uri uri = Uri.parse("http://www.library.pitt.edu/");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+    public void openAthletics(View view) {
+        Uri uri = Uri.parse("http://www.pittsburghpanthers.com/");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+    public void openNews(View view) {
+        Uri uri = Uri.parse("http://pittnews.com/");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
 }
