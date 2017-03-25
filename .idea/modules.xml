@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PushNotify.iml" filepath="$PROJECT_DIR$/PushNotify.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PittNow.iml" filepath="$PROJECT_DIR$/PittNow.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
