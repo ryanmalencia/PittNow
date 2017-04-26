@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="play-services-panorama-10.2.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/97a5b4b459a5452a5cc83c0da2d36966c6af01c7/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/97a5b4b459a5452a5cc83c0da2d36966c6af01c7/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/385261a0492f3fc399edd435baec5dda176005bc/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/385261a0492f3fc399edd435baec5dda176005bc/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

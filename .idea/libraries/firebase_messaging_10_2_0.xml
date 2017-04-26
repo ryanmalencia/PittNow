@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="firebase-messaging-10.2.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/3226fca382c25c1362627e8d33f32d1de50cd58b/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/3226fca382c25c1362627e8d33f32d1de50cd58b/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/2a09d00337bf3159f34ff41bd8ea6862f47c481b/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/2a09d00337bf3159f34ff41bd8ea6862f47c481b/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
